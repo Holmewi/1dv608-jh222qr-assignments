@@ -43,7 +43,7 @@ class LoginView {
 		}
 		*/
 
-		if($_SESSION["LoggedIn"] == false) {
+		if($_SESSION['LoggedIn'] === false) {
 			$response = $this->generateLoginFormHTML($message);
 		}
 		else {

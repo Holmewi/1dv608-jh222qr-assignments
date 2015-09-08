@@ -20,7 +20,7 @@ class LoginController {
 
 		$message = '';
 
-		if($this->v->getLoginRequest() && $_SESSION["LoggedIn"] === false) {
+		if($this->v->getLoginRequest() && $_SESSION['LoggedIn'] === false) {
 
 			if(empty($this->v->getUsernameInput())) {
 				
@@ -30,7 +30,8 @@ class LoginController {
 				$message = 'Password is missing';
 			}
 			else if($this->v->getUsernameInput() == "Admin" && $this->v->getPasswordInput() == "Password") {
-				$_SESSION["LoggedIn"] = true;
+				$_SESSION['LoggedIn'] = true;
+				$_SESSION['Username'] = $this->v->getUsernameInput();
 				$message = 'Welcome';			
 			}
 			else {
@@ -39,13 +40,16 @@ class LoginController {
 
 			//$this->lv->render($_SESSION['LoggedIn'], $this->v, $this->dtv, $message);
 		} 
-		else if($this->v->getLogoutRequest() && $_SESSION["LoggedIn"] === true) {
-			$_SESSION["LoggedIn"] = false;
-			$message = 'Bye bye!';
-			
-			
+		else if($this->v->getLogoutRequest() && $_SESSION['LoggedIn'] === true) {
+			$_SESSION['LoggedIn'] = false;
+			unset($_SESSION['Username']);
+			$message = 'Bye bye!';	
 		}
+
 		$this->lv->render($_SESSION['LoggedIn'], $this->v, $this->dtv, $message);
 		
+		if(!isset($_SESSION['Username']) && $_SESSION['LoggedIn'] === true) {
+			exit();
+		}
 	}
 }
