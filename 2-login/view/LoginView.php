@@ -1,5 +1,9 @@
 <?php
 
+namespace view;
+
+require_once('view/LayoutView.php');
+
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -17,26 +21,35 @@ class LoginView {
 	 *
 	 * @return  void BUT writes to standard output and cookies!
 	 */
-	public function response() {
-		$message = '';
+	public function response($message) {
+		//$message = '';
 
+		/*
 		if(isset($_POST[self::$login])) {
+			
 			if(empty($_POST[self::$name])) {
 				$message = 'Username is missing';
 			}
 			else if(empty($_POST[self::$password])) {
 				$message = 'Password is missing';
 			}
-			if($_POST[self::$name] == "Admin" && $_POST[self::$password] == "Password") {
-				$message = 'Welcome to the page!';
+			else if(isset($_POST[self::$name]) == "Admin" && isset($_POST[self::$password]) == "Password") {
+				$_SESSION["LoggedIn"] = true;
+				$message = 'Welcome to the page!';			
 			}
 			else {
 				$message = 'Wrong name or password';
 			}
 		}
+		*/
 
-		$response = $this->generateLoginFormHTML($message);
-		//$response .= $this->generateLogoutButtonHTML($message);
+		if($_SESSION["LoggedIn"] == false) {
+			$response = $this->generateLoginFormHTML($message);
+		}
+		else {
+			$response = $this->generateLogoutButtonHTML($message);
+		}
+		
 		return $response;
 	}
 
@@ -86,5 +99,17 @@ class LoginView {
 		//RETURN REQUEST VARIABLE: USERNAME
 		//Ternary Operator - if condition (field is set) is true, set to field to value - else empty 
 		return (isset($_POST[self::$name]) ? $_POST[self::$name] : '');
+	}
+
+	public function getLoginRequest() {
+		return (isset($_POST[self::$login]));
+	}
+
+	public function getUsernameInput() {
+		return $_POST[self::$name];
+	}
+
+	public function getPasswordInput() {
+		return $_POST[self::$password];
 	}
 }
