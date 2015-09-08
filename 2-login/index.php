@@ -24,7 +24,7 @@ if(!isset($_SESSION['LoggedIn'])) {
 
 //CREATE OBJECTS OF THE CONTROLLER
 $lC = new \controller\LoginController();
-$lC->doLoginControl();
+$lC->doRequest();
 
 //$lv->render($_SESSION['LoggedIn'], $v, $dtv);
 

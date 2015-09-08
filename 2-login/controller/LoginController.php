@@ -16,10 +16,11 @@ class LoginController {
 		$this->lv = new \view\LayoutView();
 	}
 
-	public function doLoginControl() {
+	public function doRequest() {
 
 		$message = '';
-		if($this->v->getLoginRequest()) {
+
+		if($this->v->getLoginRequest() && $_SESSION["LoggedIn"] === false) {
 
 			if(empty($this->v->getUsernameInput())) {
 				
@@ -35,8 +36,16 @@ class LoginController {
 			else {
 				$message = 'Wrong name or password';
 			}
-		}
 
+			//$this->lv->render($_SESSION['LoggedIn'], $this->v, $this->dtv, $message);
+		} 
+		else if($this->v->getLogoutRequest() && $_SESSION["LoggedIn"] === true) {
+			$_SESSION["LoggedIn"] = false;
+			$message = 'Bye bye!';
+			
+			
+		}
 		$this->lv->render($_SESSION['LoggedIn'], $this->v, $this->dtv, $message);
+		
 	}
 }
