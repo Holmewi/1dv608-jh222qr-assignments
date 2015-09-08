@@ -21,7 +21,16 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-		
+
+		if(isset($_POST[self::$login])) {
+			if(empty($_POST[self::$name])) {
+				$message = 'Username is missing';
+			}
+			else if(empty($_POST[self::$password])) {
+				$message = 'Password is missing';
+			}
+		}
+
 		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
 		return $response;
@@ -48,7 +57,7 @@ class LoginView {
 	*/
 	private function generateLoginFormHTML($message) {
 		return '
-			<form method="post" > 
+			<form method="post"> 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . self::$messageId . '">' . $message . '</p>
@@ -72,5 +81,4 @@ class LoginView {
 	private function getRequestUserName() {
 		//RETURN REQUEST VARIABLE: USERNAME
 	}
-	
 }
