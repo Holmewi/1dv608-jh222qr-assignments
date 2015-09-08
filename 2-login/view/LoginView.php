@@ -27,6 +27,12 @@ class LoginView {
 			else if(empty($_POST[self::$password])) {
 				$message = 'Password is missing';
 			}
+			if($_POST[self::$name] == "Admin" && $_POST[self::$password] == "Password") {
+				$message = 'Welcome to the page!';
+			}
+			else {
+				$message = 'Wrong name or password';
+			}
 		}
 
 		$response = $this->generateLoginFormHTML($message);
