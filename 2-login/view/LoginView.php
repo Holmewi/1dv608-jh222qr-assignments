@@ -80,7 +80,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getRequestUserName() . '" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getUsernameInput() . '" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -102,18 +102,22 @@ class LoginView {
 	}
 
 	public function getLoginRequest() {
-		return (isset($_POST[self::$login]));
+		return isset($_POST[self::$login]);
 	}
 
 	public function getLogoutRequest() {
-		return (isset($_POST[self::$logout]));
+		return isset($_POST[self::$logout]);
 	}
 
 	public function getUsernameInput() {
-		return $_POST[self::$name];
+		if (isset($_POST[self::$name])) {
+			return $_POST[self::$name];
+		}
 	}
 
 	public function getPasswordInput() {
-		return $_POST[self::$password];
+		if (isset($_POST[self::$password])) {
+			return $_POST[self::$password];
+		}
 	}
 }
