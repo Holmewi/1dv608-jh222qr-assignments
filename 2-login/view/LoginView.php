@@ -13,6 +13,7 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+	private $message = '';
 
 	/**
 	 * Create HTTP response
@@ -21,13 +22,13 @@ class LoginView {
 	 *
 	 * @return  void BUT writes to standard output and cookies!
 	 */
-	public function response($isLoggedIn, $message) {
+	public function response($isLoggedIn) {
 
 		if($isLoggedIn) {
-			$response = $this->generateLogoutButtonHTML($message);
+			$response = $this->generateLogoutButtonHTML($this->message);
 		}
 		else {
-			$response = $this->generateLoginFormHTML($message);
+			$response = $this->generateLoginFormHTML($this->message);
 		}
 		
 		return $response;
@@ -100,4 +101,8 @@ class LoginView {
 			return $_POST[self::$password];
 		}
 	}
+
+	public function setMessage($message) {
+    	$this->message = $message;
+  	}
 }

@@ -22,10 +22,12 @@ class User {
 
 	public function login() {
 		$_SESSION[self::$loginStatus] = true;
+		$_SESSION['Username'] = $this->username;
 	}
 
 	public function logout() {
 		unset($_SESSION[self::$loginStatus]);
+		unset($_SESSION['Username']);
 	}
 
 	public function getLoginStatus() {

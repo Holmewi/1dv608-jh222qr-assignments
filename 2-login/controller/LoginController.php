@@ -21,34 +21,31 @@ class LoginController {
 
 	public function doRequest() {
 
-		$message = '';
+		$this->v->setMessage('');
 
-		if($this->v->getLoginRequest() /*&& $_SESSION['LoggedIn'] === false*/) {
+		if($this->v->getLoginRequest()) {
 			if(empty($this->v->getUsernameInput())) {			
-				$message = 'Username is missing';
+				$this->v->setMessage('Username is missing');
 			}
 			else if(empty($this->v->getPasswordInput())) {
-				$message = 'Password is missing';
+				$this->v->setMessage('Password is missing');
 			}
 			else if($this->v->getUsernameInput() == $this->user->getUsername() && $this->v->getPasswordInput() == $this->user->getPassword()) {
-				//$_SESSION['LoggedIn'] = true;
 				$this->user->login();
-				$_SESSION['Username'] = $this->v->getUsernameInput();
-				$message = 'Welcome';			
+				$this->v->setMessage('Welcome');	
 			}
 			else {
-				$message = 'Wrong name or password';
+				$this->v->setMessage('Wrong name or password');
 			}
 		} 
-		else if($this->v->getLogoutRequest() /*&& $_SESSION['LoggedIn'] === true*/) {
+		else if($this->v->getLogoutRequest() && $this->user->getLoginStatus()) {
 			$this->user->logout();
-			unset($_SESSION['Username']);
-			$message = 'Bye bye!';	
+			$this->v->setMessage('Bye bye!');
 		}
 
-		$this->lv->render($this->user->getLoginStatus(), $this->v, $this->dtv, $message);
-		
-		if(!isset($_SESSION['Username']) && $this->user->getLoginStatus() === true) {
+		$this->lv->render($this->user->getLoginStatus(), $this->v, $this->dtv);
+
+		if(!isset($_SESSION['Username']) && $this->user->getLoginStatus()) {
 			exit();
 		}
 	}
