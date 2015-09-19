@@ -16,7 +16,7 @@ class LayoutView {
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
           <div class="container">
-              ' . $v->response($message) . '
+              ' . $v->response($isLoggedIn, $message) . '
               
               ' . $dtv->show() . '
           </div>

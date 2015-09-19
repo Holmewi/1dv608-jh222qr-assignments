@@ -16,9 +16,11 @@ ini_set('display_errors', 'On');
 //$lv = new \view\LayoutView();
 
 session_start();
+/*
 if(!isset($_SESSION['LoggedIn'])) {
     $_SESSION['LoggedIn'] = false;
 }
+*/
 
 //$_SESSION['LoggedIn'] = false;
 
