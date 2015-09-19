@@ -48,7 +48,7 @@ class LoginController {
 
 		$this->lv->render($this->user->getLoginStatus(), $this->v, $this->dtv, $message);
 		
-		if(!isset($_SESSION['Username']) && $_SESSION['LoggedIn'] === true) {
+		if(!isset($_SESSION['Username']) && /*$_SESSION['LoggedIn'] === true*/) {
 			exit();
 		}
 	}
