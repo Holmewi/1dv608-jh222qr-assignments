@@ -106,6 +106,14 @@ class LoginView {
 		}
 	}
 
+	public function getCookieNameString() {
+		return self::$cookieName;
+	}
+
+	public function getCookiePasswordString() {
+		return self::$cookiePassword;
+	}
+
 	public function setMessage($message) {
     	$this->message = $message;
   	}

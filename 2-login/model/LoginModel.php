@@ -8,10 +8,8 @@ class LoginModel {
 
 	private static $username = "Admin";
 	private static $password = "Password";
-
-	private static $usernameCookie = "Username";
-	private static $passwordCookie = "Password";
-	private static $sessionID = "controller::LoginController::loginStatus";
+	private static $sessionID = "LoginController::LoginStatus";
+	private static $folder = "../data/";
 
 	private $user;
 
@@ -19,51 +17,42 @@ class LoginModel {
 		$this->v = $v;
 	}
 
-	public function authenticate() {
-
-		if(empty($this->v->getUsernameInput())) {
-			$this->v->setMessage('Username is missing');
-		}
-	
-		else if(empty($this->v->getPasswordInput())) {
-			$this->v->setMessage('Password is missing');
-		}
-		else if($this->v->getUsernameInput() === self::$username && $this->v->getPasswordInput() == self::$password) {
-			$this->user = new \model\UserModel(self::$username, self::$password);
-
+	public function authenticate(\model\UserModel $user) {
+		$this->user = $user;
+		if($user->getUsername() === self::$username && $user->getPassword() == self::$password) {
 			return true;
 		}
 		else {
-			$this->v->setMessage('Wrong name or password');
-
 			return false;
 		}
 	}
 
-	public function doLogin() {
-		$this->v->setMessage('Welcome');
-
+	public function doLogin() {	
 		$_SESSION[self::$sessionID] = true;
+	}
 
-		if($this->v->getKeepRequest()) {
-			setcookie(self::$usernameCookie, 'Username', time() + 60 * 60 * 24 * 365);
-			$_COOKIE[self::$usernameCookie] = $this->user->getUsername();
+	public function doKeepLogin() {	
+		$uniqueString = sha1(rand());
+		$filename = $this->user->getUsername() . "::" . $uniqueString;
 
-			$unique = sha1(rand());
-			setcookie(self::$passwordCookie, $unique, time() + 60 * 60 * 24 * 365);
-			$_COOKIE[self::$passwordCookie] = $this->user->getPassword();
-		}
+		setcookie($this->v->getCookiePasswordString(), $filename, time() + 60 * 60 * 24 * 365);
+		$_COOKIE[$this->v->getCookiePasswordString()] = $filename;
+
+		file_put_contents($this->getFileRoot($filename), "");
 	}
 
 	public function doLogout() {
-		$this->v->setMessage('Bye bye!');
-
 		unset($_SESSION[self::$sessionID]);
+		session_destroy();
 
+		// Deleting file
+		// Source from http://php.net/manual/en/function.unlink.php
+		@unlink($this->getFileRoot($_COOKIE[$this->v->getCookiePasswordString()]));
+		
 		// Deleting cookies
 		// Source from http://www.programmerinterview.com/index.php/php-questions/how-to-delete-cookies-in-php/
-		setcookie(self::$usernameCookie, '', time()-300);
-		setcookie(self::$passwordCookie, '', time()-300);
+		setcookie($this->v->getCookiePasswordString(), '', time()-300);
+
 	}
 
 	public function getLoginStatus() {
@@ -74,9 +63,15 @@ class LoginModel {
 	}
 
 	public function doCookieLogin() {
-		if(isset($_COOKIE[self::$passwordCookie])) {
-			$this->doLogin();
+		if(isset($_COOKIE[$this->v->getCookiePasswordString()])) {
+			if(file_exists($this->getFileRoot($_COOKIE[$this->v->getCookiePasswordString()]))){
+				return true;
+			}
 		}
-		
+		return false;
+	}
+
+	public function getFileRoot($filename) {
+		return self::$folder . $filename;
 	}
 }

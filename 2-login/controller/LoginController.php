@@ -20,25 +20,46 @@ class LoginController {
 		$this->lm = new \model\LoginModel($this->v);
 	}
 
+	//TODO: Create a model for the messages.
 	public function doRequest() {
 
 		$this->v->setMessage('');
 
-		if($this->v->getLoginRequest() && !$this->lm->getLoginStatus()) {
-			if($this->lm->authenticate()) {
+		if(!$this->lm->getLoginStatus()) {
+			if($this->lm->doCookieLogin()) {
+				$this->v->setMessage('Welcome back with cookie');
 				$this->lm->doLogin();
 			}
+
+			else if($this->v->getLoginRequest()) {
+				if(empty($this->v->getUsernameInput())) {
+					$this->v->setMessage('Username is missing');
+				}
+				else if(empty($this->v->getPasswordInput())) {
+					$this->v->setMessage('Password is missing');
+				}
+				else {
+					$user = new \model\UserModel($this->v->getUsernameInput(), $this->v->getPasswordInput());
+
+					if($this->lm->authenticate($user)) {
+						$this->v->setMessage('Welcome');
+						$this->lm->doLogin();
+						if($this->v->getKeepRequest()) {
+							$this->v->setMessage('Welcome and you will be remembered');
+							$this->lm->doKeepLogin();
+						}
+					} else {
+						$this->v->setMessage('Wrong name or password');
+					}
+				}
+			}
 		}
+		
 
 		if($this->v->getLogoutRequest() && $this->lm->getLoginStatus()) {
+			$this->v->setMessage('Bye bye!');
 			$this->lm->doLogout();
 		}
-
-		if(!$this->lm->getLoginStatus()) {
-			$this->lm->doCookieLogin();
-		} 
-
-		
 
 		$this->lv->render($this->lm->getLoginStatus(), $this->v, $this->dtv);
 	}
