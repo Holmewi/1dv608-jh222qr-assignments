@@ -2,13 +2,14 @@
 
 namespace model;
 
-// This model simulates an user account
 class UserModel {
-	private $username = "Admin";
-	private $password = "Password";
 
-	public function __construct() {
+	private $username;
+	private $password;
 
+	public function __construct($username, $password) {
+		$this->username = $username;
+		$this->password = $password;
 	}
 
 	public function getUsername() {

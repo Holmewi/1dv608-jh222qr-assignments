@@ -90,6 +90,10 @@ class LoginView {
 		return isset($_POST[self::$logout]);
 	}
 
+	public function getKeepRequest() {
+		return isset($_POST[self::$keep]);
+	}
+
 	public function getUsernameInput() {
 		if (isset($_POST[self::$name])) {
 			return $_POST[self::$name];
