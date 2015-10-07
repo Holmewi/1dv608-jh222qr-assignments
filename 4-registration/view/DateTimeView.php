@@ -21,6 +21,6 @@ class DateTimeView {
 		$timeString =  "$dayOfWeek, the $dayOfMonth of $month $year, The time is $time";
 
 
-		echo "<p>$timeString</p>";
+		return '<p>' . $timeString . '</p>';
 	}
 }

@@ -37,13 +37,15 @@ class LoginView {
 	 * @var \model\LoginModel
 	 */
 	private $model;
+	private $v_nv;
 
 	/**
 	 * @param \model\LoginModel $model
 	 */
-	public function __construct(\model\LoginModel $model) {
+	public function __construct(\model\LoginModel $model, \view\NavigationView $v_nv) {
 		self::$sessionSaveLocation .= \Settings::APP_SESSION_NAME;
 		$this->model = $model;
+		$this->v_nv = $v_nv;
 	}
 
 	/**
@@ -243,6 +245,7 @@ class LoginView {
 					<input type='checkbox' id='".self::$keep."' name='".self::$keep."'/>
 					
 					<input type='submit' name='".self::$login."' value='login'/>
+					<p>" . $this->v_nv->getLinkToRegistration() . "</p>
 				</fieldset>
 			</form>
 		";

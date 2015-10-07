@@ -1,41 +1,54 @@
 <?php
-/**
-  * Solution for assignment 2
-  * @author Daniel Toll
-  */
+
 namespace view;
 
 class LayoutView {
-  public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
-?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Login Example</title>
-  </head>
-  <body>
-    <h1>Assignment 2</h1>
-    <?php 
-      if ($isLoggedIn) {
-        echo "<h2>Logged in</h2>";
+  
+  public function render($isLoggedIn, LoginView $v_lv, RegisterView $v_rv, DateTimeView $dtv, NavigationView $v_nv) {
+    echo '<!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Login Example</title>
+        </head>
+        <body>
+          <h1>Assignment 4</h1>
+          ' . $this->renderIsLoggedIn($isLoggedIn, $v_nv) . '
+          
+          <div class="container">
+              ' . $this->renderViewResponse($v_lv, $v_rv, $v_nv) . '
+              ' . $dtv->show() . '
+          </div>
+          <div>
+            <em>This site uses cookies to improve user experience. By continuing to browse the site you are agreeing to our use of cookies.</em>
+          </div>
+         </body>
+      </html>
+    ';
+  }
+  
+  private function renderIsLoggedIn($isLoggedIn, NavigationView $v_nv) {
+    if ($isLoggedIn) {
+      if($v_nv->inRegistration()) {
+        return '<h2>Register new user</h2>';
       } else {
-        echo "<h2>Not logged in</h2>";
+        return '<h2>Logged in</h2>';
+      } 
     }
-  ?>
-    <div class="container" >
-      <?php 
-        echo $v->response();
+    else {
+      return '<h2>Not logged in</h2>';
+    }
+  }
 
-        $dtv->show();
-      ?>
-    </div>
+  private function renderViewResponse(LoginView $v_lv, RegisterView $v_rv, NavigationView $v_nv) {
+    if($v_nv->inRegistration()) {
+      return $v_rv->doRegistrationForm();
+    } else {
+      return $v_lv->response();
+    }
+  }
 
-    <div>
-      <em>This site uses cookies to improve user experience. By continuing to browse the site you are agreeing to our use of cookies.</em>
-    </div>
-   </body>
-</html>
-<?php
+  private function checkURL() {
+
   }
 }
