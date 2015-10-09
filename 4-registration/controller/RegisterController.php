@@ -13,7 +13,6 @@ class RegisterController {
 	}
 
 	public function doRegister() {
-		
-		echo "register";
+
 	}
 }

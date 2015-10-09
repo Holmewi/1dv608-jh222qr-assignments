@@ -21,29 +21,21 @@ class RegisterView {
 
 	public function doRegistrationForm() {
 		$message = "";
+
 		//Correct messages
-		/*
-		if ($this->userWantsToLogout() && $this->userDidLogout) {
-			$message = "Bye bye!";
-			$this->redirect($message);
-		} else if ($this->userWantsToLogin() && $this->getTempPassword() != "") {
-			$message =  "Wrong information in cookies";
-		} else if ($this->userWantsToLogin() && $this->getRequestUserName() == "") {
-			$message =  "Username is missing";
-		} else if ($this->userWantsToLogin() && $this->getPassword() == "") {
-			$message =  "Password is missing";
-		} else if ($this->loginHasFailed === true) {
-			$message =  "Wrong name or password";
-		} else {
-			$message = $this->getSessionMessage();
+		if($this->userWantsToRegister()) {
+			if(strlen($this->getRequestedUserName()) < 3 || $this->getRequestedUserName() == "") {
+				$message = "Username has too few characters, at least 3 characters.";
+			}
+			else if(strlen($this->getRequestedPassword()) < 6 || $this->getRequestedPassword() == "" || $this->getRepeatedPassword() == "") {
+				$message = "Password has too few characters, at least 6 characters.";
+			}
+			else if($this->getRequestedPassword() != $this->getRepeatedPassword()) {
+				$message = "Passwords do not match.";
+			}
 		}
-
-		//cookies
-		$this->unsetCookies();
-		*/
-
-		//generate HTML
 		
+		//generate HTML
 		return $this->generateRegisterFormHTML($message);
 	}
 
@@ -53,18 +45,33 @@ class RegisterView {
 					<legend>Register new user</legend>
 					<p id='".self::$messageId."'>$message</p>
 					<label for='".self::$name."'>Your username :</label>
-					<input type='text' id='".self::$name."' name='".self::$name."'/>
+					<input type='text' id='".self::$name."' name='".self::$name."' value='".$this->getRequestedUserName()."'/>
 
 					<label for='".self::$password."'>Your password :</label>
 					<input type='password' id='".self::$password."' name='".self::$password."'/>
 
 					<label for='".self::$repeatPassword."'>Confirm password :</label>
-					<input type='password' id='".self::$repeatPassword."' name='".self::$password."'/>
+					<input type='password' id='".self::$repeatPassword."' name='".self::$repeatPassword."'/>
 					
 					<input type='submit' name='".self::$register."' value='Register New User'/>
 					<p>" . $this->n_nv->getLinkToLogin() . "</p>
 				</fieldset>
 			</form>
 		";
+	}
+
+	private function getRequestedUserName() {
+		if (isset($_POST[self::$name]))
+			return trim($_POST[self::$name]);
+	}
+
+	private function getRequestedPassword() {
+		if (isset($_POST[self::$password]))
+			return trim($_POST[self::$password]);
+	}
+
+	private function getRepeatedPassword() {
+		if (isset($_POST[self::$repeatPassword]))
+			return trim($_POST[self::$repeatPassword]);
 	}
 }
