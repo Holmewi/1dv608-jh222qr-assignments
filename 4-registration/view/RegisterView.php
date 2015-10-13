@@ -10,6 +10,9 @@ class RegisterView {
 	private static $repeatPassword = "RegisterView::PasswordRepeat";
 	private static $messageId = "RegisterView::Message";
 
+	private $registerHasFailed = false;
+	private $registerHasSucceeded = false;
+
 	private $v_nv;
 
 	public function __construct(\view\NavigationView $v_nv) {
@@ -18,6 +21,19 @@ class RegisterView {
 	public function userWantsToRegister() {
 		return isset($_POST[self::$register]);
 	}
+	
+	public function getRegisterCredentials() {
+		return new \model\RegisterCredentials($this->getRequestedUserName(), $this->getRequestedPassword());
+	}
+
+	public function setRegisterFailed() {
+		$this->registerHasFailed = true;
+	}
+
+	public function setRegisterSucceeded() {
+		$this->registerHasSucceeded = true;
+	}
+	
 
 	public function doRegistrationForm() {
 		$message = "";

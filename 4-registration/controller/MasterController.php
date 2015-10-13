@@ -2,7 +2,7 @@
 
 namespace controller;
 
-
+require_once("model/RegisterModel.php");
 require_once("model/LoginModel.php");
 
 require_once("view/NavigationView.php");
@@ -15,26 +15,33 @@ require_once("controller/RegisterController.php");
 require_once("controller/LoginController.php");
 
 class MasterController {
+	private $connection;
 	private $v_nv;
 	private $m_lm;
 	private $v_lv;
+	private $m_rm;
 	private $v_rv;
 	
 	public function __construct() {
+		$this->connection = new \model\Connect(\Settings::SERVER, 
+												\Settings::DATABASE,
+												\Settings::DB_USERNAME,
+												\Settings::DB_PASSWORD);
 		$this->v_nv = new \view\NavigationView();
 		$this->m_lm = new \model\LoginModel();
 		$this->v_lv = new \view\LoginView($this->m_lm, $this->v_nv);
+		$this->m_rm = new \model\RegisterModel($this->connection->doConnect());
 		$this->v_rv = new \view\RegisterView($this->v_nv);
 		
 	}
 	
-	public function handleInput() {
+	public function doMasterControl() {
 		if($this->v_nv->inRegistration()) {
-			$rc = new \controller\RegisterController($this->v_rv);
-			$rc->doRegister();
+			$rc = new \controller\RegisterController($this->m_rm, $this->v_rv);
+			$rc->doRegisterControl();
 		} else {
 			$lc = new \controller\LoginController($this->m_lm, $this->v_lv);
-			$lc->doControl();
+			$lc->doLoginControl();
 		}
 	}
 

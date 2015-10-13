@@ -7,6 +7,8 @@
 require_once("Settings.php");
 require_once("controller/MasterController.php");
 
+require_once("model/DAL/Connect.php");
+
 if (Settings::DISPLAY_ERRORS) {
 	error_reporting(-1);
 	ini_set('display_errors', 'ON');
@@ -19,7 +21,7 @@ session_start();
 $mc = new \controller\MasterController();
 
 //Controller must be run first since state is changed
-$mc->handleInput();
+$mc->doMasterControl();
 
 //Generate output
 $mc->generateOutput();

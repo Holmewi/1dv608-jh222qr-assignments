@@ -7,24 +7,26 @@ namespace model;
 
 class UserCredentials {
 
-	private $userName;
+	private $username;
 	private $password;
 	private $tempPassword;
 	private $client;
 	
 	public function __construct($name, $password, $tempPassword, UserClient $client) {
-		$this->userName = htmlspecialchars($name);
+		$this->username = htmlspecialchars($name);
 		$this->password = htmlspecialchars($password);
 		$this->tempPassword = $tempPassword;
 		$this->client = $client;
 	}
 
 	public function getName() {
-		return $this->userName;
+		return $this->username;
 	}
+
 	public function getPassword() {
 		return $this->password;
 	}
+
 	public function getTempPassword() {
 		return $this->tempPassword;
 	}

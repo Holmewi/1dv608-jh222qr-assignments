@@ -41,4 +41,31 @@ class Settings {
 	 * boolean true | false
 	 */
 	const DISPLAY_ERRORS = true;
+
+	/**
+	 * Database name
+	 */
+	const SERVER = 'localhost';
+
+	/**
+	 * Database name
+	 */
+	const DATABASE = 'education';
+
+	/**
+	 * Database username
+	 */
+	const DB_USERNAME = 'root';
+
+	/**
+	 * Database username
+	 */
+	const DB_PASSWORD = 'root';
+
+	/**
+	 * Database connection string
+	 */
+	const DB_CONNECTION_STRING = 'connectionstring';
+
+	
 }

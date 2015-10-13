@@ -15,10 +15,10 @@ class LoginController {
 
 	public function __construct(\model\LoginModel $model, \view\LoginView $view) {
 		$this->model = $model;
-		$this->view =  $view;
+		$this->view = $view;
 	}
 
-	public function doControl() {
+	public function doLoginControl() {
 		
 		$userClient = $this->view->getUserClient();
 
