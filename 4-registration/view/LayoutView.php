@@ -42,13 +42,9 @@ class LayoutView {
 
   private function renderViewResponse(LoginView $v_lv, RegisterView $v_rv, NavigationView $v_nv) {
     if($v_nv->inRegistration()) {
-      return $v_rv->doRegistrationForm();
+      return $v_rv->response();
     } else {
       return $v_lv->response();
     }
-  }
-
-  private function checkURL() {
-
   }
 }

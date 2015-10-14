@@ -25,7 +25,13 @@ class LoginModel {
 
 	private $tempDAL;
 
-	public function __construct() {
+	private $conn;
+	private $userDAL;
+	private $existingUser;
+
+	public function __construct(\PDO $conn) {
+		$this->conn = $conn;
+
 		self::$sessionUserLocation .= \Settings::APP_SESSION_NAME;
 
 		if (!isset($_SESSION)) {
@@ -61,10 +67,18 @@ class LoginModel {
 	 * @return boolean
 	 */
 	public function doLogin(UserCredentials $uc) {
-		
+
 		$this->tempCredentials = $this->tempDAL->load($uc->getName());
 
-		$loginByUsernameAndPassword = \Settings::USERNAME === $uc->getName() && \Settings::PASSWORD === $uc->getPassword();
+		$this->userDAL = new \model\UserDAL($this->conn);
+		$this->existingUser = $this->userDAL->getUserFromDatabase($uc);
+
+		if($this->existingUser == null) {
+			$loginByUsernameAndPassword = false;
+		} else {
+			$loginByUsernameAndPassword = $this->existingUser->{"username"} === $uc->getName() && $this->existingUser->{"password"} === $uc->getPassword();
+		}
+		
 		$loginByTemporaryCredentials = $this->tempCredentials != null && $this->tempCredentials->isValid($uc->getTempPassword());
 
 		if ( $loginByUsernameAndPassword || $loginByTemporaryCredentials) {

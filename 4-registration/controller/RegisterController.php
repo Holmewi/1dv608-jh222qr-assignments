@@ -20,10 +20,14 @@ class RegisterController {
 	public function doRegisterControl() {
 		if($this->view->userWantsToRegister()) {
 			$regcred = $this->view->getRegisterCredentials();
-			if($this->model->doRegister($regcred)) {
-				$this->view->setRegisterSucceeded();
+			
+			if($this->view->doControlFormInput() == true) {
+				if($this->model->doRegister($regcred) == true) {
+					$this->view->setRegisterSucceeded();
+				} else {
+					$this->view->setRegisterFailed();
+				}
 			}
-			return false;
 		}
 	}
 }

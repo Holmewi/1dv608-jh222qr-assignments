@@ -25,6 +25,7 @@ class LoginView {
 	 */
 	private static $sessionSaveLocation = "\\view\\LoginView\\message";
 
+	private $redirectUsername = null;
 	/**
 	 * view state set by controller through setters
 	 * @var boolean
@@ -188,6 +189,11 @@ class LoginView {
 		return $this->generateLoginFormHTML($message);
 	}
 
+	public function redirectRegistration($message, $username) {
+		// TODO: Fix username in login form
+		$this->redirect($message);
+	}
+
 	private function redirect($message) {
 		$_SESSION[self::$sessionSaveLocation] = $message;
 		$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
@@ -252,8 +258,9 @@ class LoginView {
 	}
 
 	private function getRequestUserName() {
-		if (isset($_POST[self::$name]))
+		if (isset($_POST[self::$name])) 
 			return trim($_POST[self::$name]);
+		
 		return "";
 	}
 

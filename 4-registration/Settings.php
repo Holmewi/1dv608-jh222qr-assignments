@@ -14,16 +14,6 @@ class Settings {
 	 * The app session name allows different apps on the same webhotel to share a virtual session
 	 */
 	const APP_SESSION_NAME = "LoginLab";
-	
-	/**
-	 * Username of default user
-	 */
-	const USERNAME = "Admin";
-
-	/**
-	 * Password of default user
-	 */
-	const PASSWORD = "Password";
 
 	/**
 	 * Path to folder writable by www-data but not accessable by webserver
@@ -60,12 +50,5 @@ class Settings {
 	/**
 	 * Database username
 	 */
-	const DB_PASSWORD = 'root';
-
-	/**
-	 * Database connection string
-	 */
-	const DB_CONNECTION_STRING = 'connectionstring';
-
-	
+	const DB_PASSWORD = '';
 }

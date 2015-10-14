@@ -13,12 +13,16 @@ class RegisterModel {
 
 	public function doRegister(\model\RegisterCredentials $regCred) {
 		
-		$this->userDAL = new \model\UserDAL($this->conn);
 
-		if($this->userDAL->checkDuplicateUsername($regCred)) {
+		if($this->getUsernameExistsStatus($regCred)) {
 			return false;
-		}
-		// TODO: ADD THE USER TO DATABASE
+		} 
+		$this->userDAL->addUserToDatabase($regCred);
 		return true;
+	}
+
+	public function getUsernameExistsStatus(\model\RegisterCredentials $regCred) {
+		$this->userDAL = new \model\UserDAL($this->conn);
+		return $this->userDAL->checkUsernameExists($regCred);
 	}
 }

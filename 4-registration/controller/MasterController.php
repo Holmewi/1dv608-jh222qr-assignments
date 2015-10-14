@@ -28,11 +28,10 @@ class MasterController {
 												\Settings::DB_USERNAME,
 												\Settings::DB_PASSWORD);
 		$this->v_nv = new \view\NavigationView();
-		$this->m_lm = new \model\LoginModel();
+		$this->m_lm = new \model\LoginModel($this->connection->doConnect());
 		$this->v_lv = new \view\LoginView($this->m_lm, $this->v_nv);
 		$this->m_rm = new \model\RegisterModel($this->connection->doConnect());
-		$this->v_rv = new \view\RegisterView($this->v_nv);
-		
+		$this->v_rv = new \view\RegisterView($this->m_rm, $this->v_nv, $this->v_lv);
 	}
 	
 	public function doMasterControl() {

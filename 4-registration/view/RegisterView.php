@@ -10,13 +10,17 @@ class RegisterView {
 	private static $repeatPassword = "RegisterView::PasswordRepeat";
 	private static $messageId = "RegisterView::Message";
 
-	private $registerHasFailed = false;
 	private $registerHasSucceeded = false;
 
+	private $message = "";
+	private $model;
 	private $v_nv;
+	private $v_lv;
 
-	public function __construct(\view\NavigationView $v_nv) {
-		$this->n_nv = $v_nv;
+	public function __construct(\model\RegisterModel $model, \view\NavigationView $v_nv, \view\LoginView $v_lv) {
+		$this->model = $model;
+		$this->v_nv = $v_nv;
+		$this->v_lv = $v_lv;
 	}
 	public function userWantsToRegister() {
 		return isset($_POST[self::$register]);
@@ -26,40 +30,60 @@ class RegisterView {
 		return new \model\RegisterCredentials($this->getRequestedUserName(), $this->getRequestedPassword());
 	}
 
-	public function setRegisterFailed() {
-		$this->registerHasFailed = true;
-	}
-
 	public function setRegisterSucceeded() {
 		$this->registerHasSucceeded = true;
 	}
-	
 
-	public function doRegistrationForm() {
-		$message = "";
-
-		//Correct messages
-		if($this->userWantsToRegister()) {
-			if(strlen($this->getRequestedUserName()) < 3 || $this->getRequestedUserName() == "") {
-				$message = "Username has too few characters, at least 3 characters.";
-			}
-			else if(strlen($this->getRequestedPassword()) < 6 || $this->getRequestedPassword() == "" || $this->getRepeatedPassword() == "") {
-				$message = "Password has too few characters, at least 6 characters.";
-			}
-			else if($this->getRequestedPassword() != $this->getRepeatedPassword()) {
-				$message = "Passwords do not match.";
-			}
-		}
-		
-		//generate HTML
-		return $this->generateRegisterFormHTML($message);
+	public function getRegistrationStatus() {
+		return $this->registerHasSucceeded;
 	}
 
-	private function generateRegisterFormHTML($message) {
+	public function doControlFormInput() {
+		
+		if(strlen($this->getRequestedUserName()) < 3 || $this->getRequestedUserName() == "") {
+			$this->message = "Username has too few characters, at least 3 characters.<br>";
+
+			if(strlen($this->getRequestedPassword()) < 6 || $this->getRequestedPassword() == "" || $this->getRepeatedPassword() == "") {
+				$this->message .= "Password has too few characters, at least 6 characters.";
+				return false;
+			}
+
+			return false;
+		}
+	 	if(strlen($this->getRequestedPassword()) < 6 || $this->getRequestedPassword() == "" || $this->getRepeatedPassword() == "") {
+			$this->message = "Password has too few characters, at least 6 characters.";
+			return false;
+		}
+		else if($this->getRequestedPassword() != $this->getRepeatedPassword()) {
+			$this->message = "Passwords do not match.";
+			return false;
+		}
+		else if($this->model->getUsernameExistsStatus($this->getRegisterCredentials())) {
+			$this->message = "User exists, pick another username.";
+			return false;
+		}
+		else if(!preg_match("^[0-9A-Za-z_]+$^", $this->getRequestedUserName())) {
+			$this->message = "Username contains invalid characters.";
+			return false;
+		}
+
+		$this->message = "Registered new user.";
+		return true;	
+	}
+
+	public function response() {
+		if($this->registerHasSucceeded) {
+			$this->v_lv->redirectRegistration($this->message, $this->getRequestedUserName());
+			//return $this->registrationCompleteView();
+		}
+		return $this->generateRegisterFormHTML();
+	}
+
+	private function generateRegisterFormHTML() {
 		return "<form method='post' > 
 				<fieldset>
 					<legend>Register new user</legend>
-					<p id='".self::$messageId."'>$message</p>
+					<p id='".self::$messageId."'>".$this->message."</p>
 					<label for='".self::$name."'>Your username :</label>
 					<input type='text' id='".self::$name."' name='".self::$name."' value='".$this->getRequestedUserName()."'/>
 
@@ -70,7 +94,18 @@ class RegisterView {
 					<input type='password' id='".self::$repeatPassword."' name='".self::$repeatPassword."'/>
 					
 					<input type='submit' name='".self::$register."' value='Register New User'/>
-					<p>" . $this->n_nv->getLinkToLogin() . "</p>
+					<p>" . $this->v_nv->getLinkToLogin() . "</p>
+				</fieldset>
+			</form>
+		";
+	}
+
+	private function registrationCompleteView() {
+		return "<form method='post' > 
+				<fieldset>
+					<legend>Register new user</legend>
+					<p id='".self::$messageId."'>".$this->message."</p>
+					<p>" . $this->v_nv->getLinkToLogin() . "</p>
 				</fieldset>
 			</form>
 		";
