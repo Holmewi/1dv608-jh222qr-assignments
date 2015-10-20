@@ -16,18 +16,18 @@ Main scenario
 2. System asks for title, description, price, unique and an product image.
 3. Admin fills in a form and adds the product image to it.
 4. System validates the image and the input.
-5a. System stores the product data in the database and presents a success message.
+5. a) System stores the product data in the database and presents a success message.
 6. System presents an alternativ to add category tags to the product (can be done later).
-7a. Admin selects categories from list and add them to the product.
+7. a) Admin selects categories from list and add them to the product.
 8. System stores the categories to the product in the database.
 
 Alternative scenarios
 
-5b. Input or image is not valid
+5. b) Input or image is not valid
 	• System presents an error message.
 	• Step 2 in main scenario.
 
-7b. Admin finishes without adding a category
+7. b) Admin finishes without adding a category
 
 ###UC2 Create new category tag
 Main scenario
