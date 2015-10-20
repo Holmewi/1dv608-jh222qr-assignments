@@ -69,7 +69,7 @@ Alternative scenario
 Main scenario
 
 1. Admin wants to update a product
-2. System lists all product
+2. a) System lists all product
 3. Admin clicks edit link for the product
 4. System presents the information ready to edit as a text input
 5. Admin updates the information
@@ -82,12 +82,9 @@ Alternative scenarios
 	- System presents an error message.
 	- Step 4 in main scenario.
 
-- 2a) Starts from UC2 step 4.
+- 2b) Starts from UC2 step 4.
 	- 3. Admin wants to edit a specific products information
-	- 4. System presents the information ready to edit as a text input
-	- 5. Admin updates the information
-	- 6. System validates the information
-	- 7. System stores the product data in the database and presents a success message.
+	- 4. Step 4 in main scenario.
 
 ###UC5 Delete a product
 Main scenario
