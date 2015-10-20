@@ -1,14 +1,15 @@
 1dv608-jh222qr-project
 ===========================
 
-Requirements
-System quality requirements
+#Requirements
+
+##System quality requirements
 	
 
 
-Use-Cases
+##Use-Cases
 
-UC1 Create new product
+###UC1 Create new product
 Main scenario
 1. Admin wants to add a product to the database.
 2. System asks for title, description, price, unique and an product image.
@@ -26,7 +27,7 @@ Alternative scenarios
 
 7b. Admin finishes without adding a category
 
-UC2 Create new category tag
+###UC2 Create new category tag
 Main scenario
 1. Admin wants to add a new category tag to the database
 2. System asks for tag name
@@ -40,14 +41,14 @@ Alternative scenario
 	• Step 2 in main scenario.
 
 
-UC2 View a product
+###UC2 View a product
 Main scenario
 1. Admin wants to view a specific product
 2. System presents a list of products
 3. Admin clicks on a product to view it
 4. System presents a view of the product
 
-UC3 Sort products by hashtag
+###UC3 Sort products by hashtag
 Main scenario
 1. Admin wants to sort products by a certain category tag
 2. Admin clicks the category from a list
@@ -57,7 +58,7 @@ Alternative scenario
 3b. There are no products with that category
 	• System presents a message saying the category is empty.
 
-UC4 Update product information
+###UC4 Update product information
 Main scenario
 1. Admin wants to update a product
 2. System lists all product
@@ -79,7 +80,7 @@ Alternative scenarios
 6. System validates the information
 7a. System stores the product data in the database and presents a success message.
 
-UC5 Delete a product
+###UC5 Delete a product
 Main scenario
 1. Admin wants to delete a product
 2. System lists all products
