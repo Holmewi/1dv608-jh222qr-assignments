@@ -23,11 +23,11 @@ Main scenario
 
 Alternative scenarios
 
- • 5. b) Input or image is not valid
+- 5b) Input or image is not valid
 	- System presents an error message
 	- Step 2 in main scenario.
 
- - Admin finishes without adding a category
+- 7b) Admin finishes without adding a category
 
 ###UC2 Create new category tag
 Main scenario
