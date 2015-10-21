@@ -4,7 +4,10 @@
 #Requirements
 
 ##System quality requirements
-	
+- Should respond to input in an acceptable timeframe.
+- Should be user-friendly.
+- Should provide helpful error messages.
+- Should validate user input.	
 
 
 ##Use-Cases
