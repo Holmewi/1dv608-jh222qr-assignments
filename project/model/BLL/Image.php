@@ -12,11 +12,12 @@ class Image {
 			throw new \FileMissingException("File is missing, you need to add an image file.");
 		}
 
-		$filePath = self::$path . basename($file["name"]);
+		$file["name"] = $this->getSEOStringURL($file["name"]);
 
+		$filePath = self::$path . basename($file["name"]);
 		$imageFileType = pathinfo($filePath, PATHINFO_EXTENSION);
 		$isFileImage = getimagesize($file["tmp_name"]);
-		$file["name"] = $this->getSEOStringURL($file["name"]);
+		
 
 		if($isFileImage) {
 
@@ -32,7 +33,6 @@ class Image {
 			if(strlen($file["name"]) <= 0 || strlen($file["name"]) > 64) {
 				throw new \FilenameWrongLengthException("Filename must be between 1 and 64 characters.");
 			}
-			//move_uploaded_file($file["tmp_name"], $this->filePath . $newName);
 		} else {
 			throw new \FileNotImageException("The file is not an image.");
 		}

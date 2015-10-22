@@ -15,6 +15,8 @@ class AdminController {
 	private $html;
 	private $cpv;
 
+	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
+
 	public function __construct() {
 		$this->connect = new \model\ConnectDB(\Settings::SERVER, 
 												\Settings::DATABASE,
@@ -25,7 +27,7 @@ class AdminController {
 			$this->model = new \model\ProductModel($this->connect->getConnection());
 		}
 		catch (\DatabaseConnectionException $e) {
-			var_dump("Database connection failed");
+			echo $e->getMessage();
 		}
 
 		$this->html = new \view\HTMLView();
@@ -35,19 +37,29 @@ class AdminController {
 	public function doControl() {
 		if($this->cpv->adminWantsToAddProduct()) {
 			$image = $this->cpv->getImage();
-			$p = $this->cpv->getProduct($image->getFilename());
 
-			if($p !== null) {
+			if($image !== null) {
+				$p = $this->cpv->getProduct($image->getFilename());
+
+				if($p !== null) {
 				$message = "";
 
 				try {
 					$this->model->doCreate($p, $image);
+
+					$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+					header("Location: $actual_link");
+					exit;
 				}
 				catch(\SQLUniqueExistsException $e) {
-					$message = "Unique already exists in database.";
+					$_SESSION[self::$sessionMessage] = $e->getMessage();
+					//$this->cpv->setMessage($e->getMessage());
 				}
+			}
+			
 
-				var_dump($message);
+			
+
 				/*
 				if($this->model->doCreate($p)) {
 					//TODO: Set success status
