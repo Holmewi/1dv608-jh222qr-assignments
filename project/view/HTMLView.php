@@ -4,9 +4,9 @@ namespace view;
 
 class HTMLView {
 
-	public function render(\view\CreateProductView $cpv) {
+	public function render(\view\CreateProductView $cpv, \view\ProductListView $plv) {
     	echo '<!DOCTYPE html>
-	      	<html lang="en-GB">
+	      	<html>
 	        	<head>
 	          		<meta charset="utf-8">
 	          		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -16,8 +16,8 @@ class HTMLView {
 	          		<h1>Project</h1>
 	          			
 	          
-	          		<div class="container">
-
+	          		<div id="container">
+	          			' . $plv->getHTML() . '
 	          		</div>
 	          		<aside>
 	          			' . $cpv->getResponse() . '

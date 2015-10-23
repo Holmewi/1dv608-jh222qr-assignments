@@ -11,6 +11,9 @@ class Image {
 		if($file["size"] <= 0) {
 			throw new \FileMissingException("File is missing, you need to add an image file.");
 		}
+		if (!file_exists(self::$path)) {
+		    mkdir(self::$path, 0777, true);
+		}
 
 		$file["name"] = $this->getSEOStringURL($file["name"]);
 
@@ -18,9 +21,7 @@ class Image {
 		$imageFileType = pathinfo($filePath, PATHINFO_EXTENSION);
 		$isFileImage = getimagesize($file["tmp_name"]);
 		
-
 		if($isFileImage) {
-
 			if(file_exists($filePath)) {
 				throw new \FileExistsException("Filename already exists.");
 			}
@@ -36,7 +37,7 @@ class Image {
 		} else {
 			throw new \FileNotImageException("The file is not an image.");
 		}
-		
+
 		$this->image = $file;
 	}
 
@@ -63,6 +64,54 @@ class Image {
 			$filename = $filename . "." . $extension;
 		}
     	return $filename;
+	}
+	
+	public function uploadImage() {
+		move_uploaded_file($this->image["tmp_name"], self::$path . $this->image["name"]);
+	}
+
+	// Source: http://code.tutsplus.com/articles/how-to-dynamically-create-thumbnails--net-1818
+	public function createSquareImage($squareSideSize, $newPath) {
+		$filename = $this->getFilename();
+
+		if(preg_match('/[.](jpg)$/', $filename)) {
+        $img = imagecreatefromjpeg(self::$path . $filename);
+	    } else if (preg_match('/[.](jpeg)$/', $filename)) {
+	        $img = imagecreatefromgif(self::$path . $filename);
+	    } else  if (preg_match('/[.](png)$/', $filename)) {
+	        $img = imagecreatefrompng(self::$path . $filename);
+	    }
+
+	    // Capturing the original width and height of the image
+	    $ox = imagesx($img);
+	    $oy = imagesy($img);
+	    
+	    // Setting the new width and height of the image to aspect ratio 1:1
+	    if($ox > $oy) {
+	    	$nx = ($ox - $oy) / 2;
+	    	$ny = 0;
+	    	$smallest = $oy;
+	    } else {
+	    	$nx = 0;
+	    	$ny = ($oy - $ox) / 2;
+	    	$smallest = $ox;
+	    }
+
+	    $thumb = imagecreatetruecolor($squareSideSize, $squareSideSize);
+	    imagecopyresampled($thumb, $img, 0, 0, $nx, $ny, $squareSideSize, $squareSideSize, $smallest, $smallest);
+	    //$nx = self::$thumbWidth;
+	    //$ny = floor($oy * (self::$thumbWidth / $ox));
+
+	    //$nm = imagecreatetruecolor($nx, $ny);
+     
+    	//imagecopyresized($nm, $img, 0,0,0,0,$nx,$ny,$ox,$oy);
+
+    	if (!file_exists($newPath)) {
+		    mkdir($newPath, 0777, true);
+		}
+
+		//imagepng($nm, self::$thumbPath . $filename);
+		imagepng($thumb, $newPath . $filename);
 	}
 
 	public function getFilename() {

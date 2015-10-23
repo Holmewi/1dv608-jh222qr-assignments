@@ -12,7 +12,7 @@ class CreateProductView {
 	private static $unique = "CreateProductView::Unique";
 	private static $create = "CreateProductView::Create";
 
-	private static $path = "files/";
+	private static $path = \Settings::IMG_PATH;
 	private $imageIsValid = false;
 	private $message;
 

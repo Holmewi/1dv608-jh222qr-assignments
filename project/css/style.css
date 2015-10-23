@@ -1,3 +1,14 @@
+body {
+	font-family:'Helvetica Neue',sans-serif;
+}
+
+#container {
+	float:left;
+	clear:both;
+}
+
+
+/* Create product */
 aside {
 	float:right;
 	width: 400px;
@@ -36,7 +47,7 @@ aside input[type=text] {
 }
 
 aside input[type=file]::-webkit-file-upload-button {
-	/* STYLE UPLOAD BUTTON */
+	/* STYLE ADD IMAGE BUTTON */
 }
 
 aside input[type=file] {
@@ -78,3 +89,79 @@ input[type=submit] {
 	border:1px solid #623F1D;
 	float: right;
 }
+
+/* Product list */
+#container ul {
+	display: inline-table;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.list-header {
+	font-weight: 600;
+	margin-left: 25px;
+}
+
+.list-product {
+	clear: both;
+	padding-top: 5px;
+}
+
+.thumb-img {
+	float:left;
+	width: 25px;
+}
+
+.product-id {
+	float:left;
+	display: inline-block;
+	width: 50px;
+	margin-left: 10px;
+}
+
+.title {
+	float:left;
+	display: inline-block;
+	width: 250px;
+}
+
+.price {
+	float:left;
+	display: inline-block;
+	width: 85px;
+}
+
+.create-date {
+	float:left;
+	display: inline-block;
+	width: 150px;
+}
+
+.update-date {
+	float:left;
+	display: inline-block;
+	width: 150px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
