@@ -46,6 +46,14 @@ class ProductDAL {
 		$smt->execute();
 	}
 
+	public function removeProduct($id) {
+		$sql = "DELETE FROM " . self::$table . " WHERE " . self::$c_id . "=$id";
+		
+		if($this->conn->exec($sql) !== true) {
+			throw new \PDOFetchObjectException("An error occured. Could not delete the object.");
+		}					
+	}
+
 	public function getProductArray() {
 		$smt = $this->conn->prepare("SELECT * FROM " . self::$table);
 		$smt->execute();
@@ -63,11 +71,37 @@ class ProductDAL {
 												$product->{ self::$c_update });
 		}
 
+		if($productArray == null) {
+			throw new \PDOTableEmptyException("No products in database.");
+		}
 		return $productArray;
 	}
 
-	public function getProductByID($productID) {
-		// TOTO: Implement
-		return null;
+	public function getProductByUnique($unique) {
+		$smt = $this->conn->prepare("SELECT * FROM " . self::$table . " WHERE " . self::$c_unique . "=?");
+		$smt->execute([$unique]);
+
+		if($product = $smt->fetchObject()) {
+			return new \model\Product($product->{ self::$c_title },
+											$product->{ self::$c_filename },
+											$product->{ self::$c_desc },
+											$product->{ self::$c_price },
+											$product->{ self::$c_unique },
+											$product->{ self::$c_id },
+											$product->{ self::$c_create },
+											$product->{ self::$c_update });
+		}
+		throw new \PDOFetchObjectException("An error occured. Couldn't fetch the object.");
+	}
+
+	public function getProductFilename($id) {	
+		$smt = $this->conn->prepare("SELECT ".self::$c_filename." FROM " . self::$table . " WHERE " . self::$c_id . "=?");
+		$smt->execute([$id]);
+		$filename = $smt->fetchColumn();
+
+		if($filename == null) {
+			throw new \PDOFetchColumnException("An error occured. Couldn't fetch the column.");
+		}
+		return $filename;	
 	}
 }

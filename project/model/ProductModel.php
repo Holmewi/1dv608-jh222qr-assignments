@@ -10,6 +10,7 @@ class ProductModel {
 	private static $thumbSide = \Settings::THUMB_IMG_SIDE;
 	private static $mediumPath = \Settings::MEDIUM_IMG_PATH;
 	private static $mediumSide = \Settings::MEDIUM_IMG_SIDE;
+	private static $largePath = \Settings::LARGE_IMG_PATH;
 
 	private $conn;
 	private $productDAL;
@@ -20,11 +21,11 @@ class ProductModel {
 		$this->productDAL = new \model\ProductDAL($this->conn);
 	}
 
-	public function doCreate(\model\Product $p, \model\Image $image) {
+	public function createProduct(\model\Product $p, \model\Image $image) {
 
 		
 		if($this->productDAL->checkUniqueExists($p->getUnique())) {
-			throw new \SQLUniqueExistsException("Unique already exists in database.");
+			throw new \PDOUniqueExistsException("Unique already exists in database.");
 		}
 		
 		$this->productDAL->addProduct($p);
@@ -35,11 +36,28 @@ class ProductModel {
 		return true;
 	}
 
+	public function deleteProduct($id) {
+		$filename = $this->productDAL->getProductFilename($id);
+		$this->productDAL->removeProduct($id);
+
+		if(file_exists(self::$thumbPath . $filename)) {
+			unlink(self::$thumbPath . $filename);
+		}
+		if(file_exists(self::$mediumPath . $filename)) {
+			unlink(self::$mediumPath . $filename);
+		}
+		if(file_exists(self::$largePath . $filename)) {
+			unlink(self::$largePath . $filename);
+		}
+
+		
+	}
+
 	public function getProducts() {
 		return $this->productDAL->getProductArray();
 	}
 
-	public function getProduct($productID) {
-		return $this->productDAL->getProductByID($productID);
+	public function getProductByUnique($unique) {
+		return $this->productDAL->getProductByUnique($unique);
 	}
 }

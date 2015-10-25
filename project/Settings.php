@@ -6,7 +6,7 @@ class Settings {
 	const MESSAGE_SESSION_NAME = "MessageSession";
 
 	// Path to original image server storage
-	const IMG_PATH = "files/large/";
+	const LARGE_IMG_PATH = "files/large/";
 
 	// Path to thumnail image server storage
 	const THUMB_IMG_PATH = "files/thumbs/";

@@ -70,7 +70,7 @@ aside textarea {
 	float: right;
 }
 
-input[type=submit] {
+aside input[type=submit] {
 	background: #FEDA71;
 	background: -moz-linear-gradient(top,#FEDA71 0%,#FEBB49 100%);
 	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#FEDA71),color-stop(100%,#FEBB49));
@@ -90,7 +90,7 @@ input[type=submit] {
 	float: right;
 }
 
-/* Product list */
+/* Product list view */
 #container ul {
 	display: inline-table;
 	margin: 0;
@@ -141,14 +141,47 @@ input[type=submit] {
 .update-date {
 	float:left;
 	display: inline-block;
-	width: 150px;
+	min-width: 150px;
 }
 
+.delete-confirm {
+	clear: both;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	text-align: right;
+	font-size: 14px;
+}
 
+.delete-confirm form {
+	margin-left: 15px;
+	float: right;
+}
 
+/* Product view */
+.product {
+	display: block;
+}
+.medium-img {
+	float:left;
+	width: 250px;
+}
 
+.product-info {
+	margin-left: 25px;
+	display: block;
+	float:left;
+}
 
+.product-action {
+	padding-top: 25px;
+	clear: both;
+	display: block;
+}
 
+.product-action li {
+	margin-right: 25px;
+	display: inline;
+}
 
 
 

@@ -4,7 +4,7 @@ namespace view;
 
 class CreateProductView {
 	
-	private static $messageId = "CreateProductView::Message";
+	private static $messageID = "CreateProductView::Message";
 	private static $title = "CreateProductView::Title";
 	private static $file = "CreateProductView::File";
 	private static $desc = "CreateProductView::Desc";
@@ -12,7 +12,6 @@ class CreateProductView {
 	private static $unique = "CreateProductView::Unique";
 	private static $create = "CreateProductView::Create";
 
-	private static $path = \Settings::IMG_PATH;
 	private $imageIsValid = false;
 	private $message;
 
@@ -77,7 +76,7 @@ class CreateProductView {
 
 	public function getProduct($filename) {
 		$this->message = "";
-		$_SESSION[self::$sessionMessage] = "Product successfully added to the database.";	
+			
 
 		try {
 			return new \model\Product($this->getTitle(), 
@@ -122,7 +121,7 @@ class CreateProductView {
 		return "<form method='post' enctype='multipart/form-data'> 
 				<fieldset>
 					<legend>Add new product to database</legend>
-					<p id='".self::$messageId."'>".$this->message."</p>
+					<p id='".self::$messageID."'>".$this->message."</p>
 
 					<span>
 					<label for='".self::$title."'>Title:</label>

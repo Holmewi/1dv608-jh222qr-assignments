@@ -3,7 +3,7 @@
 namespace model;
 
 class Image {
-	private static $path = \Settings::IMG_PATH;
+	private static $path = \Settings::LARGE_IMG_PATH;
 	private $image;
 
 	public function __construct($file) {
@@ -63,11 +63,13 @@ class Image {
 		if(strlen($extension) > 0) {
 			$filename = $filename . "." . $extension;
 		}
+
     	return $filename;
 	}
 	
 	public function uploadImage() {
 		move_uploaded_file($this->image["tmp_name"], self::$path . $this->image["name"]);
+		chmod(self::$path . $this->image["name"], 0666);
 	}
 
 	// Source: http://code.tutsplus.com/articles/how-to-dynamically-create-thumbnails--net-1818
@@ -110,8 +112,10 @@ class Image {
 		    mkdir($newPath, 0777, true);
 		}
 
+		
 		//imagepng($nm, self::$thumbPath . $filename);
 		imagepng($thumb, $newPath . $filename);
+		chmod($newPath . $filename, 0666);
 	}
 
 	public function getFilename() {
@@ -124,7 +128,5 @@ class Image {
 
 	public function getImage() {
 		return $this->image;
-	}
-
-	
+	}	
 }

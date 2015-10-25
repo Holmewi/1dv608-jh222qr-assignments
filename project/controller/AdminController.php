@@ -5,39 +5,36 @@ namespace controller;
 require_once("model/BLL/Image.php");
 require_once("model/BLL/Product.php");
 require_once("model/ProductModel.php");
+
 require_once("view/HTMLView.php");
+require_once("view/NavigationView.php");
 require_once("view/CreateProductView.php");
 require_once("view/ProductListView.php");
+require_once("view/ProductView.php");
 
 class AdminController {
 
-	private $connect;
 	private $model;
-	private $html;
-	private $cpv;
+	private $nv;
+
 	private $plv;
+	private $pv;
+	private $aside;
 
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
-	public function __construct() {
-		$this->connect = new \model\ConnectDB(\Settings::SERVER, 
-												\Settings::DATABASE,
-												\Settings::DB_USERNAME,
-												\Settings::DB_PASSWORD);
-		
-		try {
-			$this->model = new \model\ProductModel($this->connect->getConnection());
-		}
-		catch (\DatabaseConnectionException $e) {
-			echo $e->getMessage();
-		}
+	public function __construct(\model\ProductModel $model, \view\NavigationView $nv) {
+		$this->model = $model;
+		$this->nv = $nv;
 
-		$this->html = new \view\HTMLView();
+		// TODO: Implement a new aside view for the product view
 		$this->cpv = new \view\CreateProductView();
-		$this->plv = new \view\ProductListView($this->model);
+
+		$this->plv = new \view\ProductListView($this->model, $this->nv);
 	}
 
-	public function doControl() {
+	public function doAdminControl() {
+		
 		if($this->cpv->adminWantsToAddProduct()) {
 			$image = $this->cpv->getImage();
 
@@ -48,21 +45,62 @@ class AdminController {
 					$message = "";
 
 					try {
-						$this->model->doCreate($p, $image);
+						$this->model->createProduct($p, $image);
 						$_SESSION[self::$sessionMessage] = "Product successfully added to the database.";
 						$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 						header("Location: $actual_link");
 						exit;
 					}
-					catch(\SQLUniqueExistsException $e) {
+					catch(\PDOUniqueExistsException $e) {
 						$_SESSION[self::$sessionMessage] = $e->getMessage();
 					}
 				}
 			}
 		}
+		if($this->nv->adminWantsToViewProduct()) {
+			$product = $this->plv->getSelectedProduct();
+			$this->pv = new \view\ProductView($this->nv, $product);
+		}
+		if($this->nv->adminWantsToDeleteProduct()) {
+			$id = $this->nv->getProductID();
+			$this->plv->getDeleteConfirmation($id);
+
+			if ($this->plv->adminConfirm()) {
+				try {
+					$this->model->deleteProduct($id);
+					//$_SESSION[self::$sessionMessage] = "Product successfully deleted from the database.";
+					$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+					header("Location: $actual_link");
+					exit;
+				}
+				catch(\PDOFetchObjectException $e) {
+					$_SESSION[self::$sessionMessage] = $e->getMessage();
+				}
+				catch(\PDOFetchColumnException $e) {
+					$_SESSION[self::$sessionMessage] = $e->getMessage();
+				}
+			}
+			if ($this->plv->adminCancel()) {
+				$_SESSION[self::$sessionMessage] = "Product was not deleted.";
+				$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+				header("Location: $actual_link");
+				exit;
+			}
+		}
 	}
 
-	public function generateOutput() {
-		$this->html->render($this->cpv, $this->plv);
+	public function getContainerView() {
+		if($this->nv->inProductView()) {
+			return $this->pv;
+		}
+		return $this->plv;
+	}
+
+	// TODO: Implement a new aside view for the product view
+	public function getAsideView() {
+		if($this->nv->inProductView()) {
+			return $this->cpv;
+		}
+		return $this->cpv;
 	}
 }
