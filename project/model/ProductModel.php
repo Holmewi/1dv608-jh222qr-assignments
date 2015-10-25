@@ -38,7 +38,7 @@ class ProductModel {
 
 	public function deleteProduct($id) {
 		$filename = $this->productDAL->getProductFilename($id);
-		$this->productDAL->removeProduct($id);
+		
 
 		if(file_exists(self::$thumbPath . $filename)) {
 			unlink(self::$thumbPath . $filename);
@@ -50,7 +50,13 @@ class ProductModel {
 			unlink(self::$largePath . $filename);
 		}
 
+		$this->productDAL->removeProduct($id);
+
 		
+	}
+
+	public function updateProduct(\model\Product $p) {
+		return $this->productDAL->updateProduct($p);
 	}
 
 	public function getProducts() {
@@ -59,5 +65,9 @@ class ProductModel {
 
 	public function getProductByUnique($unique) {
 		return $this->productDAL->getProductByUnique($unique);
+	}
+
+	public function getProductByID($id) {
+		return $this->productDAL->getProductByID($id);
 	}
 }

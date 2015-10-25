@@ -105,6 +105,8 @@ aside input[type=submit] {
 
 .list-product {
 	clear: both;
+	display: block;
+	float: left;
 	padding-top: 5px;
 }
 
@@ -144,7 +146,17 @@ aside input[type=submit] {
 	min-width: 150px;
 }
 
-.delete-confirm {
+.delete-list-action {
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+.edit-list-action {
+	font-size: 12px;
+}
+
+.delete-form {
+	display: block;
 	clear: both;
 	padding-top: 5px;
 	padding-bottom: 10px;
@@ -152,10 +164,42 @@ aside input[type=submit] {
 	font-size: 14px;
 }
 
-.delete-confirm form {
+.delete-form form {
 	margin-left: 15px;
 	float: right;
 }
+
+.update-form {
+	display: block;
+	clear: both;
+	padding-bottom: 20px;
+	text-align: left;
+	font-size: 14px;
+}
+
+.update-form form {
+	float: left;
+}
+
+.update-title-input {
+	margin-left: 85px;
+	width: 220px;
+}
+
+.update-price-input {
+	margin-left: 20px;
+	margin-right: 160px;
+	width: 65px;
+}
+
+.cancel-button {
+
+}
+
+.confirm-button {
+
+}
+
 
 /* Product view */
 .product {
@@ -182,10 +226,6 @@ aside input[type=submit] {
 	margin-right: 25px;
 	display: inline;
 }
-
-
-
-
 
 
 

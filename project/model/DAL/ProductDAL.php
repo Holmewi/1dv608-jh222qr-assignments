@@ -35,8 +35,8 @@ class ProductDAL {
 		$smt = $this->conn->prepare("INSERT INTO " . self::$table . " (
 									" . self::$c_title . ", 
 									" . self::$c_filename . ", 
-									" . self::$c_desc . ",
-									" . self::$c_price . ",
+									" . self::$c_desc . ", 
+									" . self::$c_price . ", 
 									" . self::$c_unique . ") 
 										VALUES ('" . $p->getTitle() . "', 
 											'" . $p->getFilename() . "',
@@ -49,9 +49,21 @@ class ProductDAL {
 	public function removeProduct($id) {
 		$sql = "DELETE FROM " . self::$table . " WHERE " . self::$c_id . "=$id";
 		
-		if($this->conn->exec($sql) !== true) {
-			throw new \PDOFetchObjectException("An error occured. Could not delete the object.");
+		if($this->conn->exec($sql) == 0) {
+			throw new \PDOFetchObjectException("An error occured. Could not delete the product.");
 		}					
+	}
+
+	public function updateProduct(\model\Product $p) {
+		//$smt = $this->conn->prepare("UPDATE ".self::$table." SET ".self::$c_title." = ".$p->getTitle().", ".self::$c_price." = ".$p->getPrice()." WHERE ".self::$c_unique."=?");
+		$smt = $this->conn->prepare("UPDATE ".self::$table." SET ".self::$c_title." = '".$p->getTitle()."', 
+																	".self::$c_desc." = '".$p->getDesc()."', 
+																	".self::$c_price." = '".$p->getPrice()."', 
+																	".self::$c_unique." = '".$p->getUnique()."' WHERE ".self::$c_id."=".$p->getProductID()."");
+		$smt->execute();
+		//if($this->conn->exec($sql) == 0) {
+		//	throw new \PDOFetchObjectException("An error occured. Could not update the product.");
+		//}
 	}
 
 	public function getProductArray() {
@@ -80,6 +92,23 @@ class ProductDAL {
 	public function getProductByUnique($unique) {
 		$smt = $this->conn->prepare("SELECT * FROM " . self::$table . " WHERE " . self::$c_unique . "=?");
 		$smt->execute([$unique]);
+
+		if($product = $smt->fetchObject()) {
+			return new \model\Product($product->{ self::$c_title },
+											$product->{ self::$c_filename },
+											$product->{ self::$c_desc },
+											$product->{ self::$c_price },
+											$product->{ self::$c_unique },
+											$product->{ self::$c_id },
+											$product->{ self::$c_create },
+											$product->{ self::$c_update });
+		}
+		throw new \PDOFetchObjectException("An error occured. Couldn't fetch the object.");
+	}
+
+	public function getProductByID($id) {
+		$smt = $this->conn->prepare("SELECT * FROM " . self::$table . " WHERE " . self::$c_id . "=?");
+		$smt->execute([$id]);
 
 		if($product = $smt->fetchObject()) {
 			return new \model\Product($product->{ self::$c_title },

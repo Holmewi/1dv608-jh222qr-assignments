@@ -7,7 +7,8 @@ namespace view;
 class NavigationView {
 
 	private static $viewURLPrefix = "p";
-	private static $idURLPrefix = "id";
+	private static $deleteURLPrefix = "delete";
+	private static $updateURLPrefix = "update";
 
 	public function getProductListURL() {
 		return "?";
@@ -17,8 +18,12 @@ class NavigationView {
 		return "?".self::$viewURLPrefix."=$unique";
 	}
 
-	public function getProductIDURL($id) {
-		return "?".self::$idURLPrefix."=$id";
+	public function getProductDeleteURL($id) {
+		return "?".self::$deleteURLPrefix."=$id";
+	}
+
+	public function getProductUpdateURL($id) {
+		return "?".self::$updateURLPrefix."=$id";
 	}
 
 	public function adminWantsToViewProduct() {
@@ -29,7 +34,14 @@ class NavigationView {
 	}
 
 	public function adminWantsToDeleteProduct() {
-		if(isset($_GET[self::$idURLPrefix])) {
+		if(isset($_GET[self::$deleteURLPrefix])) {
+			return true;
+		}
+		return false;
+	}
+
+	public function adminWantsToUpdateProduct() {
+		if(isset($_GET[self::$updateURLPrefix])) {
 			return true;
 		}
 		return false;
@@ -41,25 +53,15 @@ class NavigationView {
 	}
 
 	public function getProductID() {
-		assert($this->adminWantsToDeleteProduct());
-		return $_GET[self::$idURLPrefix];
+		if($this->adminWantsToUpdateProduct()) {
+			return $_GET[self::$updateURLPrefix];
+		}
+		if($this->adminWantsToDeleteProduct()) {
+			return $_GET[self::$deleteURLPrefix];
+		}
 	}
 
 	public function inProductView() {
 		return isset($_GET[self::$viewURLPrefix]) == true;
 	}
-
-	/*
-	public function getSelectedProduct(\model\ProductModel $model) {
-		assert($this->adminWantsToViewProduct());
-		$unique = $this->getProductUnique();
-
-		try {
-			return $model->getProduct($unique);
-		} 
-		catch(\PDOFetchObjectException $e) {
-			$this->message = $e->getMessage();
-		}
-	}
-	*/
 }

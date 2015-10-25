@@ -46,10 +46,7 @@ class AdminController {
 
 					try {
 						$this->model->createProduct($p, $image);
-						$_SESSION[self::$sessionMessage] = "Product successfully added to the database.";
-						$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-						header("Location: $actual_link");
-						exit;
+						$this->plv->redirect("Product successfully added to the database.");
 					}
 					catch(\PDOUniqueExistsException $e) {
 						$_SESSION[self::$sessionMessage] = $e->getMessage();
@@ -63,15 +60,11 @@ class AdminController {
 		}
 		if($this->nv->adminWantsToDeleteProduct()) {
 			$id = $this->nv->getProductID();
-			$this->plv->getDeleteConfirmation($id);
 
 			if ($this->plv->adminConfirm()) {
 				try {
 					$this->model->deleteProduct($id);
-					//$_SESSION[self::$sessionMessage] = "Product successfully deleted from the database.";
-					$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-					header("Location: $actual_link");
-					exit;
+					$this->plv->redirect("Product successfully deleted from the database.");
 				}
 				catch(\PDOFetchObjectException $e) {
 					$_SESSION[self::$sessionMessage] = $e->getMessage();
@@ -81,10 +74,20 @@ class AdminController {
 				}
 			}
 			if ($this->plv->adminCancel()) {
-				$_SESSION[self::$sessionMessage] = "Product was not deleted.";
-				$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-				header("Location: $actual_link");
-				exit;
+				$this->plv->redirect("Product was not deleted.");
+			}
+		}
+		if($this->nv->adminWantsToUpdateProduct()) {
+			$id = $this->nv->getProductID();
+			$product = $this->model->getProductByID($id);
+
+			if($this->plv->adminConfirm()) {
+				$updatedProduct = $this->plv->getProduct($product);
+				$this->model->updateProduct($updatedProduct);
+				$this->plv->redirect("Product successfully updated.");
+			}
+			if ($this->plv->adminCancel()) {
+				$this->plv->redirect("Product was not updated.");
 			}
 		}
 	}
