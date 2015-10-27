@@ -101,16 +101,14 @@ class AdminController {
 					for ($i = 0; $i < count($addCategories); $i++) {
 						$this->categoryModel->addProductCategory($this->pv->getProductID(), $addCategories[$i]);
 					}
-					$this->hcv->redirect("Product categories succesfully updated.");
 				}
 
 				if(count($deleteCategories) > 0) {
 					for ($j = 0; $j < count($deleteCategories); $j++) {
 						$this->categoryModel->deleteProductCategory($this->pv->getProductID(), $deleteCategories[$j]);
-					}
-					$this->hcv->redirect("Product categories succesfully updated.");
+					}	
 				}
-
+				$this->hcv->redirect("Product categories succesfully updated.");
 			}
 		} else {
 			if($this->cpv->adminWantsToAddProduct()) {
