@@ -55,15 +55,11 @@ class ProductDAL {
 	}
 
 	public function updateProduct(\model\Product $p) {
-		//$smt = $this->conn->prepare("UPDATE ".self::$table." SET ".self::$c_title." = ".$p->getTitle().", ".self::$c_price." = ".$p->getPrice()." WHERE ".self::$c_unique."=?");
 		$smt = $this->conn->prepare("UPDATE ".self::$table." SET ".self::$c_title." = '".$p->getTitle()."', 
 																	".self::$c_desc." = '".$p->getDesc()."', 
 																	".self::$c_price." = '".$p->getPrice()."', 
 																	".self::$c_unique." = '".$p->getUnique()."' WHERE ".self::$c_id."=".$p->getProductID()."");
 		$smt->execute();
-		//if($this->conn->exec($sql) == 0) {
-		//	throw new \PDOFetchObjectException("An error occured. Could not update the product.");
-		//}
 	}
 
 	public function getProductArray() {

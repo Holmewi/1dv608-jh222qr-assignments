@@ -29,7 +29,7 @@ class ProductView {
 	private $product;
 	private $message;
 
-	public function __construct(\view\NavigationView $nv, $product) {
+	public function __construct(\view\NavigationView $nv, \model\Product $product) {
 		$this->nv = $nv;
 		$this->product = $product;
 	}
@@ -90,9 +90,9 @@ class ProductView {
 			$updateDatetime = date("Y/m/d H:i", strtotime($this->product->getUpdateDatetime()));
 		}
 
-		return "<div class='product-action'>
+		return "<h3>Product</h3><div class='product-action'>
 					<span class='back-message'>
-						<p class='back-link'><a href='".$this->nv->getProductListURL()."'>Back to list</a></p>
+						<p class='back-link'><a href='".$this->nv->getProductListURL()."'>Back to product list</a></p>
 						<p id='".self::$messageID."' class='product-view-message'>".$this->message."</p>
 					</span>
 						".$this->getDeleteConfirmation(self::$delete)."
@@ -102,7 +102,7 @@ class ProductView {
 					<div class='product-info'>
 						<div class='column-row'><span class='column-row-title'><p>Product ID:</p></span><p class='column-noedit'>".$this->product->getProductID()."</p></div>
 						<div class='column-row'>".$this->getUpdateFormField("Title:", $this->product->getTitle(), self::$editTitle, self::$title)."</div>
-						<div class='column-row'>".$this->getUpdateFormField("Desc:", $this->product->getDesc(), self::$editDesc, self::$desc)."</div>
+						<div class='column-row'>".$this->getUpdateFormField("Description:", $this->product->getDesc(), self::$editDesc, self::$desc)."</div>
 						<div class='column-row'>".$this->getUpdateFormField("Price:", $this->product->getPrice(), self::$editPrice, self::$price)."</div>
 						<div class='column-row'>".$this->getUpdateFormField("Unique:", $this->product->getUnique(), self::$editUnique, self::$unique)."</div>
 						<div class='column-row'><span class='column-row-title'><p>First created:</p></span><p class='column-noedit'>$createDatetime</p></div>

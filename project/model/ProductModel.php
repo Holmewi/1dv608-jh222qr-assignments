@@ -17,12 +17,10 @@ class ProductModel {
 
 	public function __construct(\PDO $conn) {
 		$this->conn = $conn;
-
 		$this->productDAL = new \model\ProductDAL($this->conn);
 	}
 
 	public function createProduct(\model\Product $p, \model\Image $image) {
-
 		
 		if($this->productDAL->checkUniqueExists($p->getUnique())) {
 			throw new \PDOUniqueExistsException("Unique already exists in database.");

@@ -4,6 +4,7 @@ namespace controller;
 
 require_once("model/DAL/ConnectDB.php");
 require_once("model/ProductModel.php");
+require_once("model/CategoryModel.php");
 
 require_once("view/NavigationView.php");
 
@@ -12,6 +13,7 @@ require_once("controller/AdminController.php");
 class MasterController {
 	
 	private $model;
+	private $categoryModel;
 	private $nv;
 
 	private $container;
@@ -23,6 +25,7 @@ class MasterController {
 
 		try {
 			$this->model = new \model\ProductModel($connectDB->getConnection());
+			$this->categoryModel = new \model\CategoryModel($connectDB->getConnection());
 		}
 		catch (\DatabaseConnectionException $e) {
 			echo $e->getMessage();
@@ -30,7 +33,7 @@ class MasterController {
 	}
 
 	public function doMasterControl() {
-		$ac = new \controller\AdminController($this->model, $this->nv);
+		$ac = new \controller\AdminController($this->model, $this->categoryModel, $this->nv);
 		$ac->doAdminControl();
 		$this->container = $ac->getContainerView();
 		$this->aside = $ac->getAsideView();

@@ -113,44 +113,43 @@ class CreateProductView {
 	}
 
 	private function getHTML() {
-		return "<form method='post' enctype='multipart/form-data'> 
-				<fieldset>
-					<legend>Add new product to database</legend>
-					<p id='".self::$messageID."'>".$this->message."</p>
+		return "<div class='aside-full'><div class='aside-split'><form method='post' enctype='multipart/form-data'> 
+					<fieldset>
+						<legend><h5>Add new product to database</h5></legend>
+						<p id='".self::$messageID."'>".$this->message."</p>
 
-					<span>
-					<label for='".self::$title."'>Title:</label>
-					<input type='text' id='".self::$title."' name='".self::$title."' value='".$this->getTitle()."'/>
-					</span>
+						<span>
+						<label for='".self::$title."'>Title:</label>
+						<input type='text' id='".self::$title."' name='".self::$title."' value='".$this->getTitle()."'/>
+						</span>
 
-    				<span>
-					<label for='".self::$desc."'>Description:</label>
-					<textarea id='".self::$desc."' name='".self::$desc."'>".$this->getDesc()."</textarea>
-					</span>
+	    				<span>
+						<label for='".self::$desc."'>Description:</label>
+						<textarea id='".self::$desc."' name='".self::$desc."'>".$this->getDesc()."</textarea>
+						</span>
 
-					<span>
-					<label for='".self::$price."'>Price:</label>
-					<input type='text' id='".self::$price."' name='".self::$price."' value='".$this->getPrice()."'/>
-					</span>
+						<span>
+						<label for='".self::$price."'>Price:</label>
+						<input type='text' id='".self::$price."' name='".self::$price."' value='".$this->getPrice()."'/>
+						</span>
 
-					<span>
-					<label for='".self::$unique."'>Unique:</label>
-					<input type='text' id='".self::$unique."' name='".self::$unique."' value='".$this->getUnique()."'/>
-					</span>
+						<span>
+						<label for='".self::$unique."'>Unique:</label>
+						<input type='text' id='".self::$unique."' name='".self::$unique."' value='".$this->getUnique()."'/>
+						</span>
 
-					<span>
-					<label for='".self::$file."'>File to upload:</label>
-    				<div class='fileinputsbg'>
-    					<div class='fileinputs'>
-    						<input type='file' id='".self::$file."' name='".self::$file."'>
-    					</div>
-    				</div>
-    				</span>
+						<span>
+						<label for='".self::$file."'>File to upload:</label>
+	    				<div class='fileinputsbg'>
+	    					<div class='fileinputs'>
+	    						<input type='file' id='".self::$file."' name='".self::$file."'>
+	    					</div>
+	    				</div>
+	    				</span>
 
-					<input type='submit' name='".self::$create."' value='Add product'/>
-				</fieldset>
-			</form>
-		";
+						<input class='submit-button' type='submit' name='".self::$create."' value='Add product'/>
+					</fieldset>
+				</form></div></div>";
 	}
 
 	private function getSEOStringURL ($string) {

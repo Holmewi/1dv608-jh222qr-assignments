@@ -24,10 +24,31 @@ body {
 
 
 /* Create product */
+fieldset {
+	border:none;
+}
+
 aside {
-	width: 400px;
+	width: 800px;
 	height: 100%;
-	margin-top: 25px;
+	padding-top: 25px;
+	background-color: #f0f0f0;
+}
+
+.aside-full {
+	display: inline-block;
+	max-width: 800px;
+	width: 800px;
+	clear: both;
+}
+
+.aside-split {
+	width: 395px;
+	float: right;
+}
+
+label {
+	font-size: 14px;
 }
 
 aside span {
@@ -85,7 +106,7 @@ aside textarea {
 	float: right;
 }
 
-aside input[type=submit] {
+aside .submit-button {
 	background: #FEDA71;
 	background: -moz-linear-gradient(top,#FEDA71 0%,#FEBB49 100%);
 	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#FEDA71),color-stop(100%,#FEBB49));
@@ -96,12 +117,14 @@ aside input[type=submit] {
 	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#FEDA71',endColorstr='#FEBB49',GradientType=0);
 	padding:8px 18px;
 	color:#623F1D;
+	border:1px solid #623F1D;
 	font-family:'Helvetica Neue',sans-serif;
-	font-size:16px;
+	font-size:14px;
 	border-radius:48px;
 	-moz-border-radius:48px;
 	-webkit-border-radius:48px;
 	border:1px solid #623F1D;
+	clear:both;
 	float: right;
 }
 
@@ -241,7 +264,7 @@ aside input[type=submit] {
 
 .back-link {
 	font-size: 14px;
-	margin-right: 205px;
+	margin-right: 150px;
 	float: left;
 }
 
@@ -357,6 +380,60 @@ aside input[type=submit] {
 	clear: both;
 }
 
+/* Handle category view */
 
+.category-level {
+	font-size: 12px;
+}
 
+.primary-categories {
+	float: left;
+	clear: both;
+}
 
+.secondary-categories {
+	float: left;
+	clear: both;
+}
+
+.tertiary-categories {
+	float: left;
+	clear: both;
+}
+
+.checkbox {
+	display: block;
+	width: 150px;
+	max-width: 150px;
+	float: left;
+}
+
+.checkbox input {
+	display: inline;
+	float: left;
+}
+
+.checkbox span {
+	font-size: 14px;
+	display: inline;
+	max-width: 124px;
+	float: left;
+	overflow: hidden;
+}
+
+aside select {
+	max-width: 250px;
+	min-width: 250px;
+	height: 20px;
+	float: right;
+}
+
+.create-category-form {
+	float: right;
+	margin-right: 30px;
+}
+
+.add-category-form {
+	margin: 0 auto;
+	width: 780px;
+}
