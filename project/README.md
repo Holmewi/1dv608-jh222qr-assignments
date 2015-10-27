@@ -48,7 +48,7 @@ Alternative scenario
 	- Step 2 in main scenario.
 
 
-###UC2 View a product
+###UC3 View a product
 Main scenario
 
 1. Admin wants to view a specific product
@@ -56,7 +56,7 @@ Main scenario
 3. Admin clicks on a product to view it
 4. System presents a view of the product
 
-###UC3 Sort products by hashtag
+###UC4 Sort products by hashtag
 Main scenario
 
 1. Admin wants to sort products by a certain category tag
@@ -68,7 +68,7 @@ Alternative scenario
 - 3b) There are no products with that category
 	- System presents a message saying the category is empty.
 
-###UC4 Update product information
+###UC5 Update product information
 Main scenario
 
 1. Admin wants to update a product
@@ -85,11 +85,11 @@ Alternative scenarios
 	- System presents an error message.
 	- Step 4 in main scenario.
 
-- 2b) Starts from UC2 step 4.
+- 2b) Starts from UC3 step 4.
 	- 3. Admin wants to edit a specific products information
 	- 4. Step 4 in main scenario.
 
-###UC5 Delete a product
+###UC6 Delete a product
 Main scenario
 
 1. Admin wants to delete a product
