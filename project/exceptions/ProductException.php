@@ -12,3 +12,5 @@ class DescWrongLengthException extends Exception{}
 class PriceMissingException extends Exception{}
 class PriceTooLowException extends Exception{}
 class PriceWrongFormatException extends Exception{}
+
+class UpdateErrorException extends Exception{}

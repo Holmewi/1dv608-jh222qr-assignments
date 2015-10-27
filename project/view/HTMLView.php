@@ -13,15 +13,17 @@ class HTMLView {
 	          		<title>Project</title>
 	        	</head>
 	        	<body>
-	          		<h1>Project</h1>
-	          			
-	          
-	          		<div id="container">
-	          			' . $container . '
+	        		<div id="wrapper">
+		          		<h1>Project</h1>
+		          			
+		          
+		          		<div id="container">
+		          			' . $container . '
+		          		</div>
+		          		<aside>
+		          			' . $aside . '
+		          		</aside>
 	          		</div>
-	          		<aside>
-	          			' . $aside . '
-	          		</aside>
 	         	</body>
 	      	</html>
     	';

@@ -6,7 +6,6 @@ require_once("exceptions/ProductException.php");
 require_once("exceptions/DatabaseException.php");
 
 require_once("model/DAL/ConnectDB.php");
-//require_once("controller/AdminController.php");
 require_once("controller/MasterController.php");
 require_once("view/HTMLView.php");
 

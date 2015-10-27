@@ -1,18 +1,33 @@
-body {
+html, body {
 	font-family:'Helvetica Neue',sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	text-align: center;
+}
+
+#wrapper {
+	margin: 0 auto;
+	text-align: left;
+	width: 800px;
 }
 
 #container {
-	float:left;
+	display: inline-block;
 	clear:both;
+	width: 800px;
+	padding-bottom: 25px;
+	border-bottom: 1px dashed gray;
 }
 
 
 /* Create product */
 aside {
-	float:right;
 	width: 400px;
 	height: 100%;
+	margin-top: 25px;
 }
 
 aside span {
@@ -96,6 +111,22 @@ aside input[type=submit] {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
+}
+
+.header-message {
+	
+	display: inline-block;
+	width: 800px;
+}
+
+.header-message h3 {
+	float: left;
+}
+
+.header-message p {
+	float: right;
+	font-size: 14px;
+	margin-top: 22px;
 }
 
 .list-header {
@@ -202,9 +233,46 @@ aside input[type=submit] {
 
 
 /* Product view */
-.product {
-	display: block;
+.product-action {
+	clear: both;
+	display: inline-block;
+	width: 800px;
 }
+
+.back-link {
+	font-size: 14px;
+	margin-right: 205px;
+	float: left;
+}
+
+.back-message {
+	font-size: 14px;
+	float: left;
+}
+
+.product-view-message {
+	float:left;
+}
+
+.delete-submit {
+	font-size: 14px;
+	margin-top: 12px;
+	float: right;
+}
+
+.delete-submit span {
+	margin-right: 25px;
+}
+
+.delete-submit input[type=submit] {
+
+}
+
+
+.product {
+	float: left;
+}
+
 .medium-img {
 	float:left;
 	width: 250px;
@@ -214,12 +282,8 @@ aside input[type=submit] {
 	margin-left: 25px;
 	display: block;
 	float:left;
-}
-
-.product-action {
-	padding-top: 25px;
-	clear: both;
-	display: block;
+	width: 500px;
+	max-width: 500px;
 }
 
 .product-action li {
@@ -227,13 +291,71 @@ aside input[type=submit] {
 	display: inline;
 }
 
+.column-row {
+	display: inline;
+	float: left;
+	margin-bottom: 10px;
+	clear: both;
+}
 
+.column-row p {
+	display: inline;
+}
 
+.column-row form {
+	display: inline;
+}
 
+.update-action {
+	display: block;
+	float: right;
+	clear: both;
+}
 
+.column-row textarea {
+	display: block;
+	max-width: 350px;
+	min-width: 350px;
+	height: auto;
+	min-height: 70px;
+	border: solid 1px #D3D3D3;
+	resize: none;
+}
 
+.column-row-title {
+	display: inline-block;
+	width: 100px;
+	font-size: 12px;
+	font-weight: 600;
+}
 
+.column-noedit {
+	font-size: 14px;
+}
 
+.edit-submit {
+	margin-left: -5px;
+	margin-right: 10px;
+}
+
+.update-confirm {
+	float: right;
+	margin-left: 10px;
+}
+
+.column-desc {
+	width: 330px;
+	float: right;
+	font-size: 14px;
+}
+
+.column-created {
+	clear: both;
+}
+
+.column-updated {
+	clear: both;
+}
 
 
 

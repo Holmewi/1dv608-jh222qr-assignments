@@ -12,11 +12,10 @@ class CreateProductView {
 	private static $unique = "CreateProductView::Unique";
 	private static $create = "CreateProductView::Create";
 
-	private $imageIsValid = false;
-	private $message;
-
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
+	private $message;
+	
 	public function __construct() {
 
 	}
@@ -39,10 +38,6 @@ class CreateProductView {
 			return $message;
 		}
 		return "";
-	}
-
-	public function setMessage($message) {
-		$this->message = $message;
 	}
 
 	public function getImage() {

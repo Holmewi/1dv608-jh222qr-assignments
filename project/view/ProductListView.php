@@ -2,6 +2,10 @@
 
 namespace view;
 
+require_once("exceptions/ImageException.php");
+require_once("exceptions/ProductException.php");
+require_once("exceptions/DatabaseException.php");
+
 class ProductListView {
 
 	private static $messageID = "ProductListView::Message";
@@ -9,25 +13,29 @@ class ProductListView {
 	private static $cancel = "ProductListView::Cancel";
 	private static $title = "ProductListView::Title";
 	private static $price = "ProductListView::Price";
-	private static $thumbPath = \Settings::THUMB_IMG_PATH;
-	private $model;
-	private $nv;
-
-	private $message;
 
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
+	private static $thumbPath = \Settings::THUMB_IMG_PATH;
 
+	private $model;
+	private $nv;
+	private $message;
+	
 	public function __construct(\model\ProductModel $model, \view\NavigationView $nv) {
 		$this->model = $model;
 		$this->nv = $nv;
 	}
 
 	public function adminConfirm() {
-		return isset($_POST[self::$confirm]);
+		if(isset($_POST[self::$confirm])) {
+			return isset($_POST[self::$confirm]);
+		}
 	}
 
 	public function adminCancel() {
-		return isset($_POST[self::$cancel]);
+		if(isset($_POST[self::$cancel])) {
+			return isset($_POST[self::$cancel]);
+		}
 	}
 
 	public function getResponse() {
@@ -74,14 +82,14 @@ class ProductListView {
 				$price = $product->getPrice();
 				$unique = $product->getUnique();
 				$productID = $product->getProductID();
-				$createDatetime = date("Y/m/d H:m", strtotime($product->getCreateDatetime()));
+				$createDatetime = date("Y/m/d H:i", strtotime($product->getCreateDatetime()));
 				$updateDatetime = "-";
 				$viewURL = $this->nv->getProductViewURL($unique);
 				$deleteURL = $this->nv->getProductDeleteURL($productID);
 				$updateURL = $this->nv->getProductUpdateURL($productID);
 
-				if($product->getUpdateDatetime() != null) {
-					$updateDatetime = date("Y/m/d H:m", strtotime($product->getUpdateDatetime()));
+				if($product->getUpdateDatetime() !== null) {
+					$updateDatetime = date("Y/m/d H:i", strtotime($product->getUpdateDatetime()));
 				}
 				
 				$ret .= "<li class='list-product'>
@@ -97,9 +105,9 @@ class ProductListView {
 			}
 		}
 
-		$ret .= "</ul><p id='".self::$messageID."'>".$this->message."</p>";
+		$ret .= "</ul>";
 
-		return "<h3>Product List</h3> $ret";
+		return "<span class='header-message'><h3>Product List</h3><p id='".self::$messageID."'>".$this->message."</p></span>$ret";
 	}
 
 	private function getProductArray() {
@@ -148,7 +156,7 @@ class ProductListView {
 		}
 	}
 
-	public function getProduct(\model\Product $p) {
+	public function getUpdatedProduct(\model\Product $p) {
 		$this->message = "";
 			
 		try {
