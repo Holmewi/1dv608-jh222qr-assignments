@@ -5,6 +5,11 @@ namespace model;
 class ProductDAL {
 	
 	private $conn;
+
+	/**
+	 *	These names are used in database
+	 *	@var string
+	 */
 	private static $table = "product";
 	private static $c_title = "title";
 	private static $c_filename = "filename";

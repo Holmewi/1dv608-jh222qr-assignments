@@ -5,8 +5,6 @@ namespace controller;
 require_once("model/BLL/Image.php");
 require_once("model/BLL/Product.php");
 require_once("model/BLL/Category.php");
-require_once("model/ProductModel.php");
-require_once("model/CategoryModel.php");
 
 require_once("view/HTMLView.php");
 require_once("view/NavigationView.php");
@@ -18,19 +16,17 @@ require_once("view/ProductView.php");
 class AdminController {
 
 	private $model;
-	private $categoryModel;
+	
 	private $nv;
-
+	private $cpv;
 	private $plv;
-	private $hcv;
 	private $pv;
-	private $aside;
+	private $hcv;
 
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
-	public function __construct(\model\ProductModel $model, \model\CategoryModel $categoryModel, \view\NavigationView $nv) {
+	public function __construct(\model\AdminModel $model, \view\NavigationView $nv) {
 		$this->model = $model;
-		$this->categoryModel = $categoryModel;
 		$this->nv = $nv;
 
 		$this->cpv = new \view\CreateProductView();
@@ -38,15 +34,15 @@ class AdminController {
 	}
 
 	public function doAdminControl() {
-		
+
 		if($this->nv->adminWantsToViewProduct()) {
 			$product = $this->plv->getSelectedProduct();
 			$this->pv = new \view\ProductView($this->nv, $product);
-			$this->hcv = new \view\HandleCategoryView($this->nv, $this->categoryModel, $product);
+			$this->hcv = new \view\HandleCategoryView($this->nv, $this->model, $product);
 		}
 
 		if($this->nv->inProductView()) {
-			if ($this->pv->adminConfirm()) {
+			if ($this->pv->adminConfirmUpdate()) {
 				$updatedProduct = $this->pv->getUpdatedProduct();
 				if($updatedProduct !== null) {
 					try {
@@ -58,7 +54,7 @@ class AdminController {
 					}
 				} 
 			}
-			if ($this->pv->adminCancel()) {
+			if ($this->pv->adminCancelUpdate()) {
 				$this->pv->redirect("Product was not updated.");
 			}
 			if ($this->pv->adminConfirmDelete()) {
@@ -81,7 +77,7 @@ class AdminController {
 
 				if($c !== null) {
 					try {
-						$this->categoryModel->createCategory($c);
+						$this->model->createCategory($c);
 						$this->pv->redirect("Category successfully added to the database.");
 					}
 					catch(\PDOCategoryExistsException $e) {
@@ -89,7 +85,7 @@ class AdminController {
 					}
 				}
 			}
-			if ($this->hcv->adminWantsToUpdateCategories()) {					// WORKING PROGRESS
+			if ($this->hcv->adminWantsToUpdateCategories()) {
 				$this->hcv->updateCheckArrays();
 		
 				$addCategories = array();
@@ -99,13 +95,13 @@ class AdminController {
 
 				if(count($addCategories) > 0) {
 					for ($i = 0; $i < count($addCategories); $i++) {
-						$this->categoryModel->addProductCategory($this->pv->getProductID(), $addCategories[$i]);
+						$this->model->addProductCategory($this->pv->getProductID(), $addCategories[$i]);
 					}
 				}
 
 				if(count($deleteCategories) > 0) {
 					for ($j = 0; $j < count($deleteCategories); $j++) {
-						$this->categoryModel->deleteProductCategory($this->pv->getProductID(), $deleteCategories[$j]);
+						$this->model->deleteProductCategory($this->pv->getProductID(), $deleteCategories[$j]);
 					}	
 				}
 				$this->hcv->redirect("Product categories succesfully updated.");
@@ -171,6 +167,10 @@ class AdminController {
 		}
 	}
 
+	/**
+	 *	Returns a view depending on state of page
+	 *	@return view
+	 */
 	public function getContainerView() {
 		if($this->nv->inProductView()) {
 			return $this->pv;
@@ -178,7 +178,10 @@ class AdminController {
 		return $this->plv;
 	}
 
-	// TODO: Implement a new aside view for the product view
+	/**
+	 *	Returns a view depending on state of page
+	 *  @return view
+	 */
 	public function getAsideView() {
 		if($this->nv->inProductView()) {
 			return $this->hcv;

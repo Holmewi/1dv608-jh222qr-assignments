@@ -3,7 +3,13 @@
 namespace model;
 
 class Image {
+
+	/**
+	 *	Settings for path of images
+	 *	@var string
+	 */
 	private static $path = \Settings::LARGE_IMG_PATH;
+
 	private $image;
 
 	public function __construct($file) {
@@ -11,10 +17,12 @@ class Image {
 		if($file["size"] <= 0) {
 			throw new \FileMissingException("File is missing, you need to add an image file.");
 		}
+		// Create folder if it does not exist
 		if (!file_exists(self::$path)) {
 		    mkdir(self::$path, 0777, true);
 		}
 
+		// Makes the filename SEO friendly
 		$file["name"] = $this->getSEOStringURL($file["name"]);
 
 		$filePath = self::$path . basename($file["name"]);
@@ -41,6 +49,11 @@ class Image {
 		$this->image = $file;
 	}
 
+	/**
+	 * 	Method to make a filename with extension SEO friendly
+	 *	@param string $filename
+	 * 	@return string
+	 */
 	private function getSEOStringURL ($filename) {
 		$filename = strtolower($filename);
 		$extension = "";
@@ -72,7 +85,12 @@ class Image {
 		chmod(self::$path . $this->image["name"], 0666);
 	}
 
-	// Source: http://code.tutsplus.com/articles/how-to-dynamically-create-thumbnails--net-1818
+	/**
+	 * 	Method to make scale and crop image to different sizes
+	 *	Source: http://code.tutsplus.com/articles/how-to-dynamically-create-thumbnails--net-1818
+	 *	@param int $squareSideSize
+	 *	@param string $newPath
+	 */
 	public function createSquareImage($squareSideSize, $newPath) {
 		$filename = $this->getFilename();
 
@@ -101,19 +119,11 @@ class Image {
 
 	    $thumb = imagecreatetruecolor($squareSideSize, $squareSideSize);
 	    imagecopyresampled($thumb, $img, 0, 0, $nx, $ny, $squareSideSize, $squareSideSize, $smallest, $smallest);
-	    //$nx = self::$thumbWidth;
-	    //$ny = floor($oy * (self::$thumbWidth / $ox));
-
-	    //$nm = imagecreatetruecolor($nx, $ny);
-     
-    	//imagecopyresized($nm, $img, 0,0,0,0,$nx,$ny,$ox,$oy);
 
     	if (!file_exists($newPath)) {
 		    mkdir($newPath, 0777, true);
 		}
 
-		
-		//imagepng($nm, self::$thumbPath . $filename);
 		imagepng($thumb, $newPath . $filename);
 		chmod($newPath . $filename, 0666);
 	}

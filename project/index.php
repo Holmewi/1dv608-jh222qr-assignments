@@ -1,14 +1,18 @@
 <?php
+/**
+ * Project in web development with PHP
+ * @author Joakim Holmewi
+ * With some references from Daniel Toll
+ */
 
 require_once("Settings.php");
 require_once("exceptions/ImageException.php");
 require_once("exceptions/ProductException.php");
 require_once("exceptions/DatabaseException.php");
-//require_once("exceptions/CategoryException.php");
+require_once("exceptions/CategoryException.php");
 
-require_once("model/DAL/ConnectDB.php");
-require_once("controller/MasterController.php");
 require_once("view/HTMLView.php");
+require_once("controller/MasterController.php");
 
 if (Settings::DISPLAY_ERRORS) {
 	error_reporting(-1);

@@ -5,11 +5,15 @@ namespace model;
 class CategoryDAL {
 	
 	private $conn;
+
+	/**
+	 *	These names are used in database
+	 *	@var string
+	 */
 	private static $table = "category";
 	private static $c_name = "category_name";
 	private static $c_level = "category_level";
 	private static $c_id = "category_id";
-
 	private static $p_id = "product_id";
 	private static $relation_table = "product_category";
 

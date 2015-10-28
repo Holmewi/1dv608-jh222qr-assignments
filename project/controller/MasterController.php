@@ -3,19 +3,18 @@
 namespace controller;
 
 require_once("model/DAL/ConnectDB.php");
-require_once("model/ProductModel.php");
-require_once("model/CategoryModel.php");
-
+require_once("model/AdminModel.php");
 require_once("view/NavigationView.php");
-
 require_once("controller/AdminController.php");
 
 class MasterController {
 	
-	private $model;
-	private $categoryModel;
+	private $adminModel;
 	private $nv;
 
+	/**
+	 * These fields are views that renders to the HTMLView
+	 */
 	private $container;
 	private $aside;
 
@@ -24,8 +23,7 @@ class MasterController {
 		$this->nv = new \view\NavigationView();
 
 		try {
-			$this->model = new \model\ProductModel($connectDB->getConnection());
-			$this->categoryModel = new \model\CategoryModel($connectDB->getConnection());
+			$this->adminModel = new \model\AdminModel($connectDB->getConnection());
 		}
 		catch (\DatabaseConnectionException $e) {
 			echo $e->getMessage();
@@ -33,18 +31,25 @@ class MasterController {
 	}
 
 	public function doMasterControl() {
-		$ac = new \controller\AdminController($this->model, $this->categoryModel, $this->nv);
+		$ac = new \controller\AdminController($this->adminModel, $this->nv);
 		$ac->doAdminControl();
+
 		$this->container = $ac->getContainerView();
 		$this->aside = $ac->getAsideView();
 
 		// TODO: Implement controller for the normal users
 	}
 
+	/**
+	 *	@return view
+	 */
 	public function generateContainer() {
 		return $this->container;
 	}
 
+	/**
+	 *	@return view
+	 */
 	public function generateAside() {
 		return $this->aside;
 	}

@@ -4,6 +4,10 @@ namespace view;
 
 class CreateProductView {
 	
+	/**
+	 *	These names are used in $_POST
+	 *	@var string
+	 */
 	private static $messageID = "CreateProductView::Message";
 	private static $title = "CreateProductView::Title";
 	private static $file = "CreateProductView::File";
@@ -12,6 +16,10 @@ class CreateProductView {
 	private static $unique = "CreateProductView::Unique";
 	private static $create = "CreateProductView::Create";
 
+	/**
+	 * 	This name is used in session
+	 * 	@var string
+	 */
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
 	private $message;
@@ -20,10 +28,18 @@ class CreateProductView {
 
 	}
 
+	/**
+	 * Method to check if admin wants to view product
+	 * @return boolean true if admin tried to view product
+	 */
 	public function adminWantsToAddProduct() {
 		return isset($_POST[self::$create]);
 	}
 
+	/**
+	 * Gets the response of the class state
+	 * @return string HTML
+	 */
 	public function getResponse() {
 		if(empty($this->message)) {
 			$this->message = $this->getSessionMessage();
@@ -31,6 +47,10 @@ class CreateProductView {
 		return $this->getHTML();
 	}
 
+	/**
+	 * Sets the $message to the session stored string of isset
+	 * @return string $message or empty
+	 */
 	private function getSessionMessage() {
 		if (isset($_SESSION[self::$sessionMessage])) {
 			$message = $_SESSION[self::$sessionMessage];
@@ -40,6 +60,10 @@ class CreateProductView {
 		return "";
 	}
 
+	/**
+	 * 	Method to get new image
+	 * 	@return new \model\Image()
+	 */
 	public function getImage() {
 		$this->message = "";
 
@@ -69,6 +93,11 @@ class CreateProductView {
 		}
 	}
 
+	/**
+	 * 	Method to get new product
+	 *	@param string $filename
+	 * 	@return new \model\Product()
+	 */
 	public function getProduct($filename) {
 		$this->message = "";
 			
@@ -112,6 +141,10 @@ class CreateProductView {
 		}
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 * 	@return string HTML
+	 */
 	private function getHTML() {
 		return "<div class='aside-full'><div class='aside-split'><form method='post' enctype='multipart/form-data'> 
 					<fieldset>
@@ -152,6 +185,11 @@ class CreateProductView {
 				</form></div></div>";
 	}
 
+	/**
+	 * 	Method to make a string SEO friendly
+	 *	@param string $string
+	 * 	@return string
+	 */
 	private function getSEOStringURL ($string) {
 		$string = strtolower($string);
 		$string = preg_replace("/[^a-z0-9_\s-]/", "", $string);

@@ -4,7 +4,12 @@ namespace view;
 
 class ProductView {
 
+	/**
+	 *	These names are used in $_POST
+	 *	@var string
+	 */
 	private static $messageID = "ProductView::Message";
+
 	private static $title = "ProductView::Title";
 	private static $desc = "ProductView::Desc";
 	private static $price = "ProductView::Price";
@@ -14,15 +19,25 @@ class ProductView {
 	private static $editDesc = "ProductView::EditDesc";
 	private static $editPrice = "ProductView::EditPrice";
 	private static $editUnique = "ProductView::EditUnique";
+
 	private static $delete = "ProductView::Delete";
 	private static $edit = "ProductView::Edit";
 
 	private static $confirm = "ProductView::Confirm";
 	private static $cancel = "ProductView::Cancel";
-	private static $confirmDelete = "ProductListView::ConfirmDelete";
-	private static $cancelDelete = "ProductListView::CancelDelete";
+	private static $confirmDelete = "ProductView::ConfirmDelete";
+	private static $cancelDelete = "ProductView::CancelDelete";
 
+	/**
+	 *	Settings for path of images
+	 *	@var string
+	 */
 	private static $mediumPath = \Settings::MEDIUM_IMG_PATH;
+
+	/**
+	 * 	This name is used in session
+	 * 	@var string
+	 */
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
 	private $nv;
@@ -34,30 +49,50 @@ class ProductView {
 		$this->product = $product;
 	}
 
-	public function adminConfirm() {
+	/**
+	 * Method to check if admin confirms to update product
+	 * @return boolean true if admin tried to confirm
+	 */
+	public function adminConfirmUpdate() {
 		if(isset($_POST[self::$confirm])) {
 			return isset($_POST[self::$confirm]);
 		}
 	}
 
-	public function adminCancel() {
+	/**
+	 * Method to check if admin cancel to update product
+	 * @return boolean true if admin tried to cancel
+	 */
+	public function adminCancelUpdate() {
 		if(isset($_POST[self::$cancel])) {
 			return isset($_POST[self::$cancel]);
 		}
 	}
 
+	/**
+	 * Method to check if admin confirms to delete product
+	 * @return boolean true if admin tried to confirm
+	 */
 	public function adminConfirmDelete() {
 		if(isset($_POST[self::$confirmDelete])) {
 			return isset($_POST[self::$confirmDelete]);
 		}
 	}
 
+	/**
+	 * Method to check if admin cancel to delete product
+	 * @return boolean true if admin tried to cancel
+	 */
 	public function adminCancelDelete() {
 		if(isset($_POST[self::$cancelDelete])) {
 			return isset($_POST[self::$cancelDelete]);
 		}
 	}
 
+	/**
+	 * Gets the response of the class state
+	 * @return string HTML
+	 */
 	public function getResponse() {
 		if(empty($this->message)) {
 			$this->message = $this->getSessionMessage();
@@ -65,6 +100,9 @@ class ProductView {
 		return $this->getHTML();
 	}
 
+	/**
+	 * Create HTTP response and redirect the page to load a message from another class
+	 */
 	public function redirect($message) {
 		$_SESSION[self::$sessionMessage] = $message;
 		$actual_link = $this->nv->getProductViewURL($this->getUnique());
@@ -72,6 +110,10 @@ class ProductView {
 		exit;
 	}
 
+	/**
+	 * 	Sets the $message to the session stored string of isset
+	 * 	@return string $message or empty
+	 */
 	private function getSessionMessage() {
 		if (isset($_SESSION[self::$sessionMessage])) {
 			$message = $_SESSION[self::$sessionMessage];
@@ -81,8 +123,11 @@ class ProductView {
 		return "";
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 * 	@return string HTML
+	 */
 	public function getHTML() {
-		//var_dump($this->product);
 		$createDatetime = date("Y/m/d H:i", strtotime($this->product->getCreateDatetime()));
 		$updateDatetime = "-";
 
@@ -111,6 +156,14 @@ class ProductView {
 				</div>";
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 * 	@param string $title
+	 *	@param string $column
+	 *	@param static string $state
+	 *	@param static string $input
+	 * 	@return string HTML
+	 */
 	private function getUpdateFormField($title, $column, $state, $input) {
 		if($this->nv->inProductView()) {
 			if($input == self::$desc) {
@@ -140,6 +193,11 @@ class ProductView {
 		}
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 *	@param static string $state
+	 * 	@return string HTML
+	 */
 	private function getDeleteConfirmation($state) {
 		if(!isset($_POST[$state])) {
 			return "<form method='post' class='delete-submit'><input type='submit' name='".self::$delete."' value='Delete Product'/></form>";
@@ -152,6 +210,10 @@ class ProductView {
 		}
 	}
 
+	/**
+	 * 	Method to get new product from old product
+	 * 	@return new \model\Product()
+	 */
 	public function getUpdatedProduct() {
 		$this->message = "";
 			
@@ -195,6 +257,11 @@ class ProductView {
 		}
 	}
 
+	/**
+	 * 	Method to make a string SEO friendly
+	 *	@param string $string
+	 * 	@return string
+	 */
 	private function getSEOStringURL ($string) {
 		$string = strtolower($string);
 		$string = preg_replace("/[^a-z0-9_\s-]/", "", $string);

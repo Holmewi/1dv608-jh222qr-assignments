@@ -4,6 +4,10 @@ namespace view;
 
 class HandleCategoryView {
 	
+	/**
+	 *	These names are used in $_POST
+	 *	@var string
+	 */
 	private static $messageID = "HandleCategoryView::Message";
 	private static $update = "HandleCategoryView::Update";
 	private static $create = "HandleCategoryView::Create";
@@ -13,6 +17,10 @@ class HandleCategoryView {
 	private static $level = "HandleCategoryView::Level";
 	private static $check = "check";
 
+	/**
+	 * 	This name is used in session
+	 * 	@var string
+	 */
 	private static $sessionMessage = \Settings::MESSAGE_SESSION_NAME;
 
 	private $message;
@@ -27,20 +35,32 @@ class HandleCategoryView {
 	// Categories to add
 	private $addCategoryArray = array();
 
-	public function __construct(\view\NavigationView $nv, \model\CategoryModel $model, \model\Product $product) {
+	public function __construct(\view\NavigationView $nv, \model\AdminModel $model, \model\Product $product) {
 		$this->nv = $nv;
 		$this->model = $model;
 		$this->product = $product;	
 	}
 
+	/**
+	 * Method to check if admin wants to update a category to product
+	 * @return boolean true if admin tried to update category
+	 */
 	public function adminWantsToUpdateCategories() {
 		return isset($_POST[self::$update]);
 	}
 
+	/**
+	 * Method to check if admin wants to create a new category
+	 * @return boolean true if admin tried to create a category
+	 */
 	public function adminWantsToCreateCategory() {
 		return isset($_POST[self::$confirm]);
 	}
 
+	/**
+	 * Gets the response of the class state
+	 * @return string HTML
+	 */
 	public function getResponse() {
 		if(empty($this->message)) {
 			$this->message = $this->getSessionMessage();
@@ -48,6 +68,9 @@ class HandleCategoryView {
 		return $this->getHTML();
 	}
 
+	/**
+	 * Create HTTP response and redirect the page to load a message from another class
+	 */
 	public function redirect($message) {
 		$_SESSION[self::$sessionMessage] = $message;
 		$actual_link = $this->nv->getProductViewURL($this->product->getUnique());
@@ -55,6 +78,10 @@ class HandleCategoryView {
 		exit;
 	}
 
+	/**
+	 * Sets the $message to the session stored string of isset
+	 * @return string $message or empty
+	 */
 	private function getSessionMessage() {
 		if (isset($_SESSION[self::$sessionMessage])) {
 			$message = $_SESSION[self::$sessionMessage];
@@ -64,6 +91,10 @@ class HandleCategoryView {
 		return "";
 	}
 
+	/**
+	 * 	Method to get new category
+	 * 	@return new \model\Category()
+	 */
 	public function getCategory() {
 		$this->message = "";
 
@@ -84,6 +115,10 @@ class HandleCategoryView {
 		}
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 * 	@return string HTML
+	 */
 	private function getHTML() {
 		$categoryArray = $this->getCategoryArray();	
 
@@ -140,6 +175,10 @@ class HandleCategoryView {
 		return "$ret";
 	}
 
+	/**
+	 * 	Method to generate HTML
+	 * 	@return string HTML
+	 */
 	private function getCreateCategoryForm() {
 		if(!isset($_POST[self::$create])) {
 			return "<div class='aside-full'><div class='aside-split'>
@@ -170,6 +209,11 @@ class HandleCategoryView {
 		}
 	}
 
+	/**
+	 * 	Method to make a string SEO friendly
+	 *	@param string $string
+	 * 	@return string
+	 */
 	private function getSEOStringURL($string) {
 		$string = strtolower($string);
 		$string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
@@ -179,6 +223,11 @@ class HandleCategoryView {
     	return $string;
 	}
 
+	/**
+	 * 	Method to of setting checkboxes with checked or unchecked
+	 *	@param int $cid
+	 * 	@return string
+	 */
 	private function getCheck($cid) {
 		if(count($this->getProductCategoryArray()) > 0) {
 			foreach ($this->getProductCategoryArray() as $c) {
@@ -190,6 +239,9 @@ class HandleCategoryView {
 		return "";
 	}
 
+	/**
+	 * 	Method to update deleteCategoryArray and addCategoryArray
+	 */
 	public function updateCheckArrays() {
 		assert($this->adminWantsToUpdateCategories());
 		if(isset($_POST["".self::$check.""])) {
@@ -214,10 +266,14 @@ class HandleCategoryView {
 			foreach ($this->getProductCategoryArray() as $c) {
 				$this->deleteCategoryArray[] = $c->getCategoryID();		
 			}
-			//$this->deleteCategoryArray[] = $this->getProductCategoryArray()[0]->getCategoryID();
 		}
 	}
 
+	/**
+	 * 	Method to check is checkbox was checked
+	 *	@param int $id
+	 * 	@return boolean true | false
+	 */
 	public function isChecked($id) {
 		if(count($this->getProductCategoryArray()) > 0) {
 			foreach ($this->getProductCategoryArray() as $c) {
@@ -229,14 +285,17 @@ class HandleCategoryView {
 		return true;
 	}
 
+	/**
+	 * 	Method to check is checkbox was unchecked
+	 *	@param int $id
+	 * 	@return boolean true | false
+	 */
 	public function isUnchecked($cid, $check) {
-
 			foreach ($check as $id) {
 				if($cid == $id) {
 					return false;
 				}
-			}
-		
+			}	
 		return true;
 	}
 
