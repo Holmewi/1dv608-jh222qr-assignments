@@ -1,38 +1,45 @@
 <?php
 
-//This has no namespace for convenience, it should really be a common module
-namespace logger;
+namespace model;
 
-class LogItem {
-	//Maybe add some information hiding
+class LogItemBLL {
+
 	/**
 	* @var String
 	*/
-	public $m_message;
+	private $m_message;
 	
 	/**
 	* @var mixed or null
 	*/
-	public $m_object;
+	private $m_object;
 
 	/**
 	* @var array From debug_backtrace or null
 	*/
-	public $m_debug_backtrace;
-
+	private $m_debug_backtrace;
 
 	/**
 	* @var String script location
 	*/
-	public $m_calledFrom;
+	private $m_calledFrom;
 
 	/**
 	* @var Unix microtime 
 	* see http://se1.php.net/manual/en/function.microtime.php
 	*/
-	public $m_microTime;
+	private $m_microTime;
 	
-	
+	/**
+	* @var String user IP address 
+	*/
+	private $m_userIP;
+
+	/**
+	* @var String session ID 
+	*/
+	private $m_sessionID;
+
 	/**
 	* Create a log item
 	*
@@ -45,22 +52,25 @@ class LogItem {
 
 		$this->m_message = $logMessageString;
 
-		if ($logThisObject != null)
+		if ($logThisObject != null) {
 			$this->m_object = var_export($logThisObject, true);
+		}
 		
 		$this->m_debug_backtrace = debug_backtrace();
 
-		$this->m_microTime = microtime();
-
-		$this->m_calledFrom = $this->cleanFilePath($this->m_debug_backtrace[2]["file"]) . " " . $this->m_debug_backtrace[2]["line"];
-
-
+		$this->m_calledFrom = $this->cleanFilePath($this->m_debug_backtrace[2]["file"]) . " " . $this->m_debug_backtrace[2]["line"];	
+		
 		if (!$includeTrace) {
 			$this->m_debug_backtrace = null;
 		}
-		
+
+		$this->m_microTime = microtime();
+
+		$this->m_userIP = $_SERVER['REMOTE_ADDR'];
+
+		$this->m_sessionID = session_id();
 	}
-	
+
 	/**
 	* removes full path
 	* @param $path String the url of a script
@@ -75,5 +85,32 @@ class LogItem {
 
 		return substr($path, $fullLength - $partLength);
 	}
-	 
+
+	public function getMessage() {
+		return $this->m_message;
+	}
+
+	public function getObject() {
+		return $this->m_object;
+	}
+
+	public function getDebugBacktrace() {
+		return $this->m_debug_backtrace;
+	}
+
+	public function getCalledFrom() {
+		return $this->m_calledFrom;
+	}
+
+	public function getMircoTime() {
+		return $this->m_microTime;
+	}
+
+	public function getUserIP() {
+		return $this->m_userIP;
+	}
+
+	public function getSessionID() {
+		return $this->m_sessionID;
+	}
 }
