@@ -11,6 +11,6 @@ class LogController {
 	}
 
 	public function doControl() {
-
+		// Check view to show
 	}
 }
