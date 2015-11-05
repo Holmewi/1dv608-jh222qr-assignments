@@ -7,38 +7,38 @@ class LogItemBLL {
 	/**
 	* @var String
 	*/
-	private $m_message;
+	public $m_message;
 	
 	/**
 	* @var mixed or null
 	*/
-	private $m_object;
+	public $m_object;
 
 	/**
 	* @var array From debug_backtrace or null
 	*/
-	private $m_debug_backtrace;
+	public $m_debug_backtrace;
 
 	/**
 	* @var String script location
 	*/
-	private $m_calledFrom;
+	public $m_calledFrom;
 
 	/**
 	* @var Unix microtime 
 	* see http://se1.php.net/manual/en/function.microtime.php
 	*/
-	private $m_microTime;
+	public $m_microTime;
 	
 	/**
 	* @var String user IP address 
 	*/
-	private $m_userIP;
+	public $m_userIP;
 
 	/**
 	* @var String session ID 
 	*/
-	private $m_sessionID;
+	public $m_sessionID;
 
 	/**
 	* Create a log item

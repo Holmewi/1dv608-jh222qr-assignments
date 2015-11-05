@@ -20,9 +20,10 @@ class Logger {
 
 	public function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
 		$this->repository->saveToFile(new \model\LogItemBLL($logMessageString, $includeTrace, $logThisObject));
-		
-		//	TODO: Move the loadFromFile()
-		// 	This is only for testing
+	}
+
+	public function getLogArray() {
 		$this->repository->loadFromFile();
+		return $this->repository->getLogArray();
 	}
 }
