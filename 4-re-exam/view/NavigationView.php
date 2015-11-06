@@ -4,40 +4,41 @@ namespace view;
 
 class NavigationView {
 	
-	private static $IPURLPrefix = "m_userIP";
-	private static $TimeURLPrefix = "m_microTime";
-	private static $SessionURLPrefix = "m_sessionID";
+	private static $logURLPrefix = "ip";
+	private static $sessionURLPrefix = "id";
 
-	public function isIPListed() {
-		if(isset($_GET[self::$IPURLPrefix])) {
-			return true;
+	public function adminWantsToTraceIP() {
+		if(isset($_GET[self::$logURLPrefix])) {
+			return self::$logURLPrefix;
 		}
 		return false;
 	}
 
-	public function isTimeListed() {
-		if(isset($_GET[self::$TimeURLPrefix])) {
-			return true;
+	public function adminWantsToTraceSession() {
+		if(isset($_GET[self::$sessionURLPrefix])) {
+			return self::$sessionURLPrefix;
 		}
 		return false;
 	}
 
-	public function isSessionListed() {
-		if(isset($_GET[self::$SessionURLPrefix])) {
-			return true;
+	public function getLogListViewURL() {
+		return "?";
+	}
+
+	public function getLogViewURL($ip) {
+		return "?".self::$logURLPrefix."=$ip";
+	}
+
+	public function getLogSessionURL($ip) {
+		return "?".self::$sessionURLPrefix."=$ip";
+	}
+
+	public function getLogIP() {
+		if($this->adminWantsToTraceIP()) {
+			return $_GET[self::$logURLPrefix];
 		}
-		return false;
-	}
-
-	public function getListIPURL() {
-		return "?".self::$IPURLPrefix;
-	}
-
-	public function getListTimeURL() {
-		return "?".self::$TimeURLPrefix;
-	}
-
-	public function getListSessionURL() {
-		return "?".self::$SessionURLPrefix;
+		else if($this->adminWantsToTraceSession()) {
+			return $_GET[self::$sessionURLPrefix];
+		}
 	}
 }

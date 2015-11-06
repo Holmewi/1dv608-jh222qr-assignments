@@ -102,7 +102,7 @@ class LogItemBLL {
 		return $this->m_calledFrom;
 	}
 
-	public function getMircoTime() {
+	public function getMicroTime() {
 		return $this->m_microTime;
 	}
 

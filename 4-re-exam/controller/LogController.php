@@ -2,7 +2,9 @@
 
 namespace controller;
 
+require_once("view/LogListView.php");
 require_once("view/LogView.php");
+require_once("view/SessionView.php");
 
 class LogController {
 	
@@ -17,11 +19,20 @@ class LogController {
 	}
 
 	public function doControl() {
-		// Check view to show
+
 	}
 
 	public function getView() {
-		$logView = new \view\LogView($this->model);
-		return $logView->getHTML();
+		if($this->nav->adminWantsToTraceIP()) {
+			$logView = new \view\LogView($this->model, $this->nav);
+			return $logView->getHTML();
+		} 
+		else if($this->nav->adminWantsToTraceSession()) {
+			$sessionView = new \view\SessionView($this->model, $this->nav);
+			return $sessionView->getHTML();
+		} else {
+			$logListView = new \view\LogListView($this->model, $this->nav);
+			return $logListView->getHTML();
+		}	
 	}
 }

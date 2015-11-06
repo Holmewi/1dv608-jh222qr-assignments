@@ -25,13 +25,7 @@ class HTMLView {
 	        		<div id="wrapper">
 		          		<h1>Assignment 4. Re-exam</h1>
 		          		<h3>Persistent log-system</h3>	
-		          		<aside>
-		          			<ul>
-								<li><a href="'.$this->nav->getListIPURL().'">IP</a></li>
-								<li><a href="'.$this->nav->getListTimeURL().'">Session</a></li>
-								<li><a href="'.$this->nav->getListSessionURL().'">Time</a></li>
-							</ul>
-		          		</aside>
+
 		          		<div id="container">
 		          			' . $container . '
 		          		</div>
