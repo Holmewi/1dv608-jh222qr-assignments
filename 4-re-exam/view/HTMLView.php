@@ -13,7 +13,6 @@ class HTMLView {
 	}
 
 	public function getHTML($container) {
-		// CREATE HTML VIEW
 		return '<!DOCTYPE html>
 	      	<html>
 	        	<head>

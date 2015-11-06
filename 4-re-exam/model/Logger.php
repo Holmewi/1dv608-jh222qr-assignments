@@ -6,8 +6,7 @@ require_once("model/LogItemBLL.php");
 require_once("model/LogRepository.php");
 
 class Logger {
-
-	// Log items and get all logs
+	
 	private $repository;
 
 	public function __construct() {

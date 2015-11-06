@@ -10,8 +10,9 @@ class LogView {
 	private static $collectionSession = "LogCollection";
 	private static $ipSession = "ipSession";
 	
-	private $sessionListArray = array();
 	private $collectedLogArrayByIP = array();
+	private $sessionListArray = array();
+	
 	private $ip;
 
 	public function __construct(\model\Logger $model, \view\NavigationView $nav) {
@@ -23,12 +24,13 @@ class LogView {
 	*	Creates an array of objects with same IP
 	*	@param string $ip
 	*	@param array $arrayList (all logs)
+	*	@return array
 	*/
 	private function collectLogsByIP($ip, $arrayList) {
 		// Holds a collection of objects with same IP
 		$tmpIPArray = array();
 
-		// Go through all IP of every log again to add the same IPs to the array
+		// Go through all IP of every log to add the same IPs to the array
 		foreach ($arrayList as $log) {
 			if($ip == $log->m_userIP) {
 				$tmpIPArray[] = $log;
@@ -38,7 +40,11 @@ class LogView {
 		return $tmpIPArray;
 	}
 
-	private function setSessionCollection() {
+	/**
+	*	Creates an array for the session list view
+	*	@var array $this->sessionListArray
+	*/
+	private function setLogListArrayBySession() {
 		foreach ($this->collectedLogArrayByIP as $log) {	
 
 			if($this->isSessionUnique($log->m_sessionID) == false) {
@@ -64,23 +70,37 @@ class LogView {
 		return false;
 	}
 
+	/**
+	*	Sort the $this->sessionListArray array by time
+	*/
+	private function sortByTime() {
+		$sortByTime = array();
+		foreach ($this->sessionListArray as $key => $row) {
+			$sortByTime[$key] = $row['m_microTime'];
+		}
+		array_multisort($sortByTime, SORT_ASC, $this->sessionListArray);
+	}
+
+	/**
+	*	@return string HTML
+	*/
 	public function getHTML() {
 		$this->ip = $this->nav->getLogIP();
 		$arrayList = $this->model->getLogArray();
 
+		// Collect all logs with the same IP
 		$this->collectedLogArrayByIP = $this->collectLogsByIP($this->ip, $arrayList);
+
+		// Stores Array in a $_SESSION to use in SessionView
 		$_SESSION[self::$collectionSession] = $this->collectedLogArrayByIP;
+		// Stores IP in a $_SESSION to use in SessionView
 		$_SESSION[self::$ipSession] = $this->ip;
 
-		$this->setSessionCollection();
+		// Creates an array of unique Sessions to use as list view
+		$this->setLogListArrayBySession();
 
-		$sortByTime = array();
-
-		foreach ($this->sessionListArray as $key => $row) {
-			$sortByTime[$key] = $row['m_microTime'];
-		}
-
-		array_multisort($sortByTime, SORT_ASC, $this->sessionListArray);
+		// Sort the $this->sessionListArray after time ASC
+		$this->sortByTime();
 
 		$ret = '<h3>IP Address: '.$this->ip.'</h3><p><a href="'.$this->nav->getLogListViewURL().'">Back</a></p>';
 
@@ -99,10 +119,6 @@ class LogView {
 		}
 
 		return $ret;
-	}
-
-	public function getCollectedLogArray() {
-		return $this->collectedLogArrayByIP;
 	}
 }
 

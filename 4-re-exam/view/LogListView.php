@@ -6,7 +6,7 @@ class LogListView {
 	
 	private $model;
 	private $nav;
-	private $logListArray = array();
+	private $ipListArray = array();
 	private $numberOfSessions;
 
 	private static $create = "LogListView::Create";
@@ -16,6 +16,9 @@ class LogListView {
 		$this->nav = $nav;
 	}
 
+	/**
+	*	@return $_POST to check if admin wants to create a new log item
+	*/
 	public function adminWantsToCreateNewLogItem() {
 		if(isset($_POST[self::$create])) {
 			return isset($_POST[self::$create]);
@@ -23,40 +26,42 @@ class LogListView {
 	}
 
 	/**
-	*	Sets the array for the log list view
+	*	Creates an array for the ip list view
+	*	@var array $this->ipListArray
 	*/
-	private function setLogCollectionByIP() {
-		// Array of objects
+	private function setLogListArrayByIP() {
 		$arrayList = $this->model->getLogArray();
 
-		// Going through all IP of every log
 		foreach ($arrayList as $log) {	
-
 			if($this->isIPUnique($log->m_userIP) == false) {
 				$sessions = $this->countSessions($log->m_userIP, $arrayList);
 
-				array_push($this->logListArray, ["m_userIP" => $log->m_userIP, "m_microTime" => $log->m_microTime, "sessions" => $sessions]);
+				array_push($this->ipListArray, ["m_userIP" => $log->m_userIP, "m_microTime" => $log->m_microTime, "sessions" => $sessions]);
 			}	
 		}
 	}
 
 	/**
-	*	Check if the IP do already exists in the logListArray
+	*	Check if the IP do already exists in the ipListArray
 	*	@param string $ip
 	*	@return boolean TRUE | FALSE (true if exists)
 	*/
-	private function isIPUnique($ip) {
-		
-		foreach ($this->logListArray as $item) {
+	private function isIPUnique($ip) {	
+		foreach ($this->ipListArray as $item) {
 			//var_dump($item['m_userIP']);
 			if($ip == $item['m_userIP']) {
-
 				return true;
 			}	
 		}
 		return false;
 	}
 
+	/**
+	*	Count the number of sessions for each unique IP
+	*	@param string $ip
+	*	@param array $arrayList
+	*	@return int $count
+	*/
 	private function countSessions($ip, $arrayList) {
 		$count = 0;
 
@@ -70,18 +75,26 @@ class LogListView {
 		return $count;
 	}
 
-	public function getHTML() {
-		//$this->sortedLogArray = $this->sortArray($field);
-		$this->setLogCollectionByIP();
-
-		//var_dump(count($this->collectedLogArray[1]));
+	/**
+	*	Sort the $this->ipListArray array by time
+	*/
+	private function sortByTime() {
 		$sortByTime = array();
-
-		foreach ($this->logListArray as $key => $row) {
+		foreach ($this->ipListArray as $key => $row) {
 			$sortByTime[$key] = $row['m_microTime'];
 		}
+		array_multisort($sortByTime, SORT_ASC, $this->ipListArray);
+	}
 
-		array_multisort($sortByTime, SORT_ASC, $this->logListArray);
+	/**
+	*	@return string HTML
+	*/
+	public function getHTML() {
+		// Creates an array of unique IPs to use as list view
+		$this->setLogListArrayByIP();
+
+		// Sort the ipListArray after time ASC
+		$this->sortByTime();
 
 
 		$ret = '<h3>Log List View</h3><p>Logs are listed by IP</p>				
@@ -89,7 +102,7 @@ class LogListView {
 						<input type="submit" name="'.self::$create.'" value="Create new log"/>
 					</form><ul>';
 
-		foreach ($this->logListArray as $item) {
+		foreach ($this->ipListArray as $item) {
 			//var_dump($log);
 
 			list($usec, $sec) = explode(" ", $item['m_microTime']);

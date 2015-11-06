@@ -60,24 +60,22 @@ class SessionView {
 	    return $array;
 	}
 
+	/**
+	*	@return string HTML
+	*/
 	public function getHTML() {
 		// Gets the Session ID from the URL
 		$this->sessionID = $this->nav->getLogIP();
 
+		// Collect all logs with the same Session
 		$this->collectedLogArrayBySessionID = $this->collectTracesBySessionID($this->sessionID);
-		//var_dump($this->collectedLogArrayBySessionID);
 
 		$debugItems = "";
 
 		foreach ($this->collectedLogArrayBySessionID as $log) {
-				//var_dump($log->m_debug_backtrace);
-
-				//if(is_array($log->m_debug_backtrace)) {
-					$debugItems .= $this->showDebugItem($log);
-				//}
-				
-	
+			$debugItems .= $this->showDebugItem($log);
 		}
+
 		$ret = '<h3>Session ID: '.$this->sessionID.'</h3><p><a href="'.$this->nav->getLogViewURL($this->ip).'">Back</a></p>
 				<div>
 					<hr/>
@@ -97,8 +95,9 @@ class SessionView {
 		return $ret;
 	}
 
-	// TODO: Collect session id arrays
-	// ["file"]	["line"] ["function"] ["class"] ["object"] => ["m_message"] ["m_object"]
+	/**
+	*	@return string HTML
+	*/
 	private function showDebugItem(\model\LogItemBLL $item) {
 		if ($item->m_debug_backtrace != null) {
 			$debug = "<h4>Trace:</h4>

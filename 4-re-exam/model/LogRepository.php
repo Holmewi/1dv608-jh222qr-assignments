@@ -9,17 +9,21 @@ class LogRepository {
 	private static $rootElement = "archive";
 	private $logArray = array();
 
-	// Load logs from XML to LogCollection
-	// Save logs to XML from LogCollection
-
 	public function __construct() {
 
 	}
 
+	/**
+	*	@return array of all the logs
+	*/
 	public function getLogArray() {
 		return $this->logArray;
 	}
 
+	/**
+	*	Save an object to a text file
+	*	@param \model\LogItemBLL
+	*/
 	public function saveToFile(\model\LogItemBLL $item) {
 		$xmlItem = serialize($item);
 
@@ -30,6 +34,9 @@ class LogRepository {
 	    fclose($fp);
 	}
 
+	/**
+	*	Load all objects from a text file to an array
+	*/
 	public function loadFromFile() {
 		$lines = file(self::$txt);
 		$start = "[LOG]";

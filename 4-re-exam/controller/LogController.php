@@ -21,8 +21,6 @@ class LogController {
 		$this->view = $view;
 		$this->nav = $nav;
 
-		
-		
 		$this->logListView = new \view\LogListView($this->model, $this->nav);
 	}
 
@@ -31,11 +29,9 @@ class LogController {
 			$this->createNewLog();
 		}
 		if($this->nav->adminWantsToTraceIP()) {
-
 			$this->logView = new \view\LogView($this->model, $this->nav);
 		} 
 		if($this->nav->adminWantsToTraceSession()) {
-			
 			$this->sessionView = new \view\SessionView($this->model, $this->nav);	
 		}
 	}
@@ -48,15 +44,12 @@ class LogController {
 	}
 
 	public function getView() {
-		if($this->nav->inLogView()) {
-			
+		if($this->nav->inLogView()) {	
 			return $this->logView->getHTML();
 		} 
-		else if($this->nav->inSessionView()) {
-			
+		else if($this->nav->inSessionView()) {	
 			return $this->sessionView->getHTML();
 		} else {
-			
 			return $this->logListView->getHTML();
 		}	
 	}
