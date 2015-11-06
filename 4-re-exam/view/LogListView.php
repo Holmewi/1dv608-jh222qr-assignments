@@ -9,9 +9,17 @@ class LogListView {
 	private $logListArray = array();
 	private $numberOfSessions;
 
+	private static $create = "LogListView::Create";
+
 	public function __construct(\model\Logger $model, \view\NavigationView $nav) {
 		$this->model = $model;
 		$this->nav = $nav;
+	}
+
+	public function adminWantsToCreateNewLogItem() {
+		if(isset($_POST[self::$create])) {
+			return isset($_POST[self::$create]);
+		}
 	}
 
 	/**
@@ -49,8 +57,6 @@ class LogListView {
 		return false;
 	}
 
-	
-
 	private function countSessions($ip, $arrayList) {
 		$count = 0;
 
@@ -69,8 +75,19 @@ class LogListView {
 		$this->setLogCollectionByIP();
 
 		//var_dump(count($this->collectedLogArray[1]));
+		$sortByTime = array();
 
-		$ret = '<ul>';
+		foreach ($this->logListArray as $key => $row) {
+			$sortByTime[$key] = $row['m_microTime'];
+		}
+
+		array_multisort($sortByTime, SORT_ASC, $this->logListArray);
+
+
+		$ret = '<h3>Log List View</h3><p>Logs are listed by IP</p>				
+					<form method="post" class="delete-submit">
+						<input type="submit" name="'.self::$create.'" value="Create new log"/>
+					</form><ul>';
 
 		foreach ($this->logListArray as $item) {
 			//var_dump($log);

@@ -29,8 +29,16 @@ class NavigationView {
 		return "?".self::$logURLPrefix."=$ip";
 	}
 
-	public function getLogSessionURL($ip) {
-		return "?".self::$sessionURLPrefix."=$ip";
+	public function getLogSessionURL($session) {
+		return "?".self::$sessionURLPrefix."=$session";
+	}
+
+	public function inLogView() {
+		return isset($_GET[self::$logURLPrefix]) == true;
+	}
+
+	public function inSessionView() {
+		return isset($_GET[self::$sessionURLPrefix]) == true;
 	}
 
 	public function getLogIP() {

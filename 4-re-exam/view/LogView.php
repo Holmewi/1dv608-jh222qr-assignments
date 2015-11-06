@@ -6,9 +6,12 @@ class LogView {
 	
 	private $model;
 	private $nav;
+
+	private static $collectionSession = "LogCollection";
+	private static $ipSession = "ipSession";
 	
 	private $sessionListArray = array();
-	private $collectedLogArray = array();
+	private $collectedLogArrayByIP = array();
 	private $ip;
 
 	public function __construct(\model\Logger $model, \view\NavigationView $nav) {
@@ -32,13 +35,11 @@ class LogView {
 			}	
 		}
 
-		//$tmpIPArray = $this->sortObjectsInArrayByField($tmpIPArray, 'm_microTime', 'DESC');
-
 		return $tmpIPArray;
 	}
 
 	private function setSessionCollection() {
-		foreach ($this->collectedLogArray as $log) {	
+		foreach ($this->collectedLogArrayByIP as $log) {	
 
 			if($this->isSessionUnique($log->m_sessionID) == false) {
 				array_push($this->sessionListArray, ["m_sessionID" => $log->m_sessionID, "m_microTime" => $log->m_microTime]);
@@ -63,38 +64,32 @@ class LogView {
 		return false;
 	}
 
-	/**
-	*	@author Brainstorms of a Webdev
-	*	SOURCE: http://www.bswebdev.com/2012/12/php-snippet-of-the-day-sort-object-by-field-name/
-	*
-	* 	@param array $array Array of objects to sort.
- 	* 	@param string $field Name of field.
- 	* 	@param string $order (ASC|DESC)
- 	*	@return array
-	*/
-	private function sortObjectsInArrayByField(&$array, $field, $order = 'DESC') {
-		$comparer = ($order === 'ASC')
-	        ? "return -strcmp(\$a->{$field},\$b->{$field});"
-	        : "return strcmp(\$a->{$field},\$b->{$field});";
-	    usort($array, create_function('$a,$b', $comparer));
-	    return $array;
-	}
-
 	public function getHTML() {
 		$this->ip = $this->nav->getLogIP();
 		$arrayList = $this->model->getLogArray();
 
-		$this->collectedLogArray = $this->collectLogsByIP($this->ip, $arrayList);
+		$this->collectedLogArrayByIP = $this->collectLogsByIP($this->ip, $arrayList);
+		$_SESSION[self::$collectionSession] = $this->collectedLogArrayByIP;
+		$_SESSION[self::$ipSession] = $this->ip;
+
 		$this->setSessionCollection();
 
-		$ret = '<h3>'.$this->ip.'</h3><p><a href="'.$this->nav->getLogListViewURL().'">Back</a></p>';
+		$sortByTime = array();
+
+		foreach ($this->sessionListArray as $key => $row) {
+			$sortByTime[$key] = $row['m_microTime'];
+		}
+
+		array_multisort($sortByTime, SORT_ASC, $this->sessionListArray);
+
+		$ret = '<h3>IP Address: '.$this->ip.'</h3><p><a href="'.$this->nav->getLogListViewURL().'">Back</a></p>';
 
 		foreach ($this->sessionListArray as $item) {
 
 			list($usec, $sec) = explode(" ", $item['m_microTime']);
 			$date = date("Y-m-d H:i:s", $sec);
 			$sessionID = $item['m_sessionID'];
-			$userIPURL = $this->nav->getLogSessionURL($this->ip);
+			$userIPURL = $this->nav->getLogSessionURL($sessionID);
 
 			$ret .= '<li>
 						<span>Session ID: <a href="'.$userIPURL.'">'.$sessionID.'</a></span>
@@ -104,6 +99,10 @@ class LogView {
 		}
 
 		return $ret;
+	}
+
+	public function getCollectedLogArray() {
+		return $this->collectedLogArrayByIP;
 	}
 }
 

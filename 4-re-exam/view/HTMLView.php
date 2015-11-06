@@ -29,7 +29,7 @@ class HTMLView {
 		          		<div id="container">
 		          			' . $container . '
 		          		</div>
-		          		
+
 	          		</div>
 	         	</body>
 	      	</html>
