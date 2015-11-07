@@ -12,7 +12,7 @@ class SessionView {
 
 	private $collectedLogArrayByIP = array();
 	private $collectedLogArrayBySessionID = array();
-	private $ip;
+	private $sessionID;
 
 	public function __construct(\model\Logger $model, \view\NavigationView $nav) {
 		$this->model = $model;
@@ -66,6 +66,7 @@ class SessionView {
 	public function getHTML() {
 		// Gets the Session ID from the URL
 		$this->sessionID = $this->nav->getLogIP();
+		//var_dump($this->sessionID);
 
 		// Collect all logs with the same Session
 		$this->collectedLogArrayBySessionID = $this->collectTracesBySessionID($this->sessionID);
@@ -75,7 +76,6 @@ class SessionView {
 		foreach ($this->collectedLogArrayBySessionID as $log) {
 			$debugItems .= $this->showDebugItem($log);
 		}
-
 		$ret = '<h3>Session ID: '.$this->sessionID.'</h3><p><a href="'.$this->nav->getLogViewURL($this->ip).'">Back</a></p>
 				<div>
 					<hr/>
@@ -100,8 +100,9 @@ class SessionView {
 	*/
 	private function showDebugItem(\model\LogItemBLL $item) {
 		if ($item->m_debug_backtrace != null) {
-			$debug = "<h4>Trace:</h4>
-					 <ul>";
+			$debug = '<h4>Trace:</h4>
+					 <ul>';
+
 			foreach ($item->m_debug_backtrace AS $key => $row) {
 				//the two topmost items are part of the logger
 				//skip those
@@ -109,9 +110,9 @@ class SessionView {
 					continue;
 				}
 				$key = $key - 2;
-				$debug .= "<li> $key " . LogItem::cleanFilePath($row['file']) . " Line : " . $row["line"] .  "</li>";
+				$debug .= '<li> '.$key.' ' . $item->cleanFilePath($row['file']) . ' Line : ' . $row["line"] .  '</li>';
 			}
-			$debug .= "</ul>";
+			$debug .= '</ul>';
 		} else {
 			$debug = "";
 		}
@@ -122,15 +123,14 @@ class SessionView {
 			$object = "";
 		list($usec, $sec) = explode(" ", microtime());
 		$date = date("Y-m-d H:i:s", $sec);
-		$ret =  "<li>
-					<Strong>$item->m_message </strong> $item->m_calledFrom 
-					<div style='font-size:small'>$date $usec</div>
-					<pre>$object</pre>
+		$ret =  '<li>
+					<Strong>'.$item->m_message.'</strong>'.$item->m_calledFrom.' 
+					<div style="font-size:small">'.$date . ' ' .$usec.'</div>
+					<pre>'.$object.'</pre>
 					
-					$debug
+					'.$debug.'
 					
-				</li>";
-				
+				</li>';	
 		return $ret;
 	}
 }
